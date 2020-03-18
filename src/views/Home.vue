@@ -21,7 +21,10 @@
               :search="search"
             >
               <template v-slot:item.name="slotProps">
-                <router-link :to="`/users/${slotProps.item.memberId}`">{{ slotProps.item.name }}</router-link>
+                <router-link :to="`/users/${slotProps.item.id}`">{{ slotProps.item.name }}</router-link>
+              </template>
+              <template v-slot:item.memberCount="slotProps">
+                {{ members.indexOf(slotProps.item) + 1 }}
               </template>
             </v-data-table>
           </v-container>
@@ -32,6 +35,8 @@
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -41,20 +46,16 @@ export default {
           text: 'Member Id',
           align: 'start',
           sortable: false,
-          value: 'memberId'
+          value: 'memberCount'
         },
         { text: 'Name', sortable: false, value: 'name' },
         { text: 'Contact', sortable: false, value: 'contact' },
         { text: 'Status', sortable: false, value: 'status' }
-      ],
-      members: [
-        { memberId: '1', name: 'Abrar Zahin', contact: 12345678, status: 'active' },
-        { memberId: '2', name: 'Najia Afrin', contact: 12345678, status: 'inactive' },
-        { memberId: '3', name: 'Maliha Piu', contact: 12345678, status: 'inactive' },
-        { memberId: '4', name: 'Noushin Sharmili', contact: 12345678, status: 'active' },
-        { memberId: '5', name: 'Ahnaf Jaeem', contact: 12345678, status: 'inactive' }
       ]
     }
+  },
+  computed: {
+    ...mapState(['members'])
   }
 }
 </script>
