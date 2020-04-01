@@ -51,10 +51,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['admin'])
+    ...mapState(['user'])
   },
   watch: {
-    admin (value) {
+    user (value) {
       if (value !== null && value !== undefined) {
         this.$router.push('/')
       }

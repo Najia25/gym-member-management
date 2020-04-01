@@ -11,7 +11,7 @@
       <template v-slot:activator="{ on }">
         <v-text-field
         v-model="dateFormatted"
-        label="Date"
+        :label="label ? label : 'Date'"
         :hint="expirationDate ? expirationDate : ''"
         persistent-hint
         prepend-icon="mdi-calendar"
@@ -28,7 +28,7 @@
 
 export default {
   name: 'date-picker',
-  props: ['expirationDate'],
+  props: ['expirationDate', 'label'],
   data () {
     return {
       date: new Date().toISOString().substr(0, 10),
@@ -36,6 +36,7 @@ export default {
       menu: false
     }
   },
+  // try making it computed and pass down s prop assuming props are reactive.
   watch: {
     date () {
       this.dateFormatted = this.formatDate(this.date)

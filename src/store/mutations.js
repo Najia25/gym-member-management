@@ -1,7 +1,7 @@
 export default {
-  addAdmin (state, payload) {
+  addUser (state, payload) {
     console.log('chiao')
-    state.admin = payload
+    state.user = payload
   },
   addMember (state, payload) {
     state.members.push(payload)

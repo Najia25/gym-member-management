@@ -28,5 +28,6 @@ new Vue({
       }
     })
     this.$store.dispatch('loadMembers')
+    this.$store.dispatch('createUserRoles')
   }
 }).$mount('#app')

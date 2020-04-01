@@ -1,0 +1,51 @@
+Log in:
+
+Admin (ami)
+Managers
+
+New member:
+
+Required fields:
+Membership No: auto
+Membership type: life time
+Name:
+Contact no:
+Emergency contact no:
+Date of birth:
+Occupation:
+Any medical condition:
+
+Admin Approval required.
+
+Home preview:
+
+Membership number
+Name
+Contact no
+Monthly paid date
+Expired date:
+Status: xx days to expire, 
+colour:
+Green: 
+Yellow: last 7 days
+Red: expired
+
+Payment:
+
+Membership fee paid amount: xxxx (manual entry)
+Membership paid date: (manual entry)
+Monthly fee paid amount: (manual entry)
+- Service charge (auto calculation, 60% of months fee)
+- Development fee (auto calculation, 40% of monthly fee)
+
+Monthly fee paid date: (manual entry)
+Expired date: (manual entry)
+
+Payment history:
+
+Payment date> description>amount> expired date
+Example:
+
+13.03.2020>monthly fee>500>12.04.2020
+13.02.2020>monthly fee>500>12.03.2020
+13.01.2020>monthly fee>500>12.02.2020

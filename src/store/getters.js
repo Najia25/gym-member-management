@@ -6,4 +6,7 @@ export default {
       })
     }
   }
+  // getNumberOfUserRoles (state) {
+  //   return state.numberOfUserRoles
+  // }
 }

@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Signin from '../views/Signin.vue'
 import Registration from '../views/Registration.vue'
 import User from '../views/User.vue'
+import Admin from '../views/Admin.vue'
+import AdminSignUp from '../views/AdminSignUp.vue'
 import AuthGuard from './auth-guard'
 
 Vue.use(VueRouter)
@@ -32,6 +34,16 @@ const routes = [
     component: User,
     props: true,
     beforeEnter: AuthGuard
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin
+  },
+  {
+    path: '/admin/signup',
+    name: 'AdminSignUp',
+    component: AdminSignUp
   }
 ]
 

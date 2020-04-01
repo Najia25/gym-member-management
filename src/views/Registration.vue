@@ -1,12 +1,18 @@
 <template>
   <v-container>
 		<v-row>
-			<v-col cols="12" sm="6" class="mx-auto">
+			<v-col cols="12" sm="8" class="mx-auto">
 				<v-card>
           <v-container>
-            <v-card-title>Register Users</v-card-title>
+            <v-card-title>Add New Members</v-card-title>
             <v-card-text>
                 <v-form @submit.prevent="addMember" ref="form">
+                  <v-select
+                    :items="items"
+                    label="Membership Type"
+                    v-model="membershipType"
+                    outlined
+                  ></v-select>
                   <v-text-field
                     v-model="name"
                     label="Name"
@@ -19,9 +25,25 @@
                     label="Contact"
                     :rules="[rules.required]"
                   ></v-text-field>
-                  <v-file-input v-model="file" @change="onFileUpload" prepend-icon="mdi-camera" accept= "image/*" label="Upload image" :rules="[rules.required]"></v-file-input>
-                  <v-img :src="imageUrl"></v-img>
-                  <date-picker @passDate="getDate"></date-picker>
+                  <v-text-field
+                  type="number"
+                    v-model="emgContact"
+                    :counter="11"
+                    label="Emergency Contact"
+                    :rules="[rules.required]"
+                  ></v-text-field>
+                  <date-picker @passDate="getDate" label='Date Of Birth'></date-picker>
+                  <v-text-field
+                    type="text"
+                    v-model="occupation"
+                    label="Occupation"
+                    :rules="[rules.required]"
+                  ></v-text-field>
+                  <v-textarea
+                    type="text"
+                    v-model="mdclCondition"
+                    label="Medical Conditions (if any)"
+                  ></v-textarea>
                   <v-card-actions>
                     <v-btn color="primary" large class="mx-auto mb-5" type="submit">Add Member</v-btn>
                   </v-card-actions>
@@ -36,7 +58,6 @@
 
 <script>
 import DatePicker from '../components/DatePicker.vue'
-
 export default {
   components: {
     DatePicker
@@ -45,52 +66,50 @@ export default {
     formIsValid () {
       return this.name !== '' &&
       this.contact !== '' &&
-      this.dateFormatted !== ''
+      this.address !== ''
     }
   },
   data () {
     return {
+      items: ['Life Time'],
+      dateOfBirth: null,
       name: '',
-      contact: '',
-      dateFormatted: null,
-      file: null,
-      imageUrl: '',
+      contact: 0,
+      emgContact: 0,
+      occupation: '',
+      mdclCondition: '',
+      approvalStatus: '',
+      membershipType: '',
       rules: {
         required: value => !!value || 'Required.'
-      },
-      image: null
+      }
     }
   },
   methods: {
     addMember () {
-      if (!this.formIsValid) {
-        return
-      }
-      if (!this.image) {
-        return
-      }
+      // if (!this.formIsValid) {
+      // return
+      // }
       const payload = {
         name: this.name,
         contact: this.contact,
-        dateOfRegistration: this.dateFormatted,
-        image: this.image
+        emgContact: this.emgContact,
+        occupation: this.occupation,
+        mdclCondition: this.mdclCondition,
+        approvalStatus: this.approvalStatus,
+        membershipType: this.membershipType,
+        dateOfBirth: this.dateOfBirth
       }
       console.log(payload)
       this.$store.dispatch('addMember', payload)
     },
     getDate (dateFormatted) {
-      console.log(dateFormatted)
-      this.dateFormatted = dateFormatted
-    },
-    onFileUpload () {
-      const fileReader = new FileReader()
-      fileReader.addEventListener('load', () => { // triggers asynchronously when file has been read successfully
-        this.imageUrl = fileReader.result
-      })
-      fileReader.readAsDataURL(this.file)// reads the file and turns image into base64 string
-      this.image = this.file
-      console.log(this.image)
+      this.dateOfBirth = dateFormatted
     }
   }
+  // computed: {
+  //   isAdmin () {
+  //   }
+  // }
 }
 </script>

@@ -1,5 +1,5 @@
 export default {
-  admin: null,
+  user: null,
   members: [],
   error: null,
   loading: false

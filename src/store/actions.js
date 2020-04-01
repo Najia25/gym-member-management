@@ -5,15 +5,38 @@ export default {
 
   // ADMIN
 
+  signUpUser ({ commit, dispatch }, payload) {
+    // commit('setLoading', true)
+    // commit('clearError')
+    firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+      .then(
+        data => {
+          // commit('setLoading', false)
+          const newUser = {
+            id: data.user.uid,
+            role: payload.role
+          }
+          console.log(newUser.id)
+          commit('addUser', newUser)
+          dispatch('assignUserRoles', newUser)
+        }
+      )
+      .catch(error => {
+        // commit('setLoading', false)
+        // commit('setError', error)
+        console.log(error)
+      })
+  },
+
   signInUser ({ commit }, payload) {
     console.log('chiao')
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-      .then(admin => {
+      .then(user => {
         console.log('chiao')
-        const newAdmin = {
-          id: admin.uid
+        const newUser = {
+          id: user.uid
         }
-        commit('addAdmin', newAdmin)
+        commit('addUser', newUser)
       })
       .catch(error => {
         console.log('chiao')
@@ -21,56 +44,102 @@ export default {
       })
   },
   autoSignIn ({ commit }, payload) {
-    const newAdmin = {
+    const newUser = {
       id: payload.uid
     }
-    commit('addAdmin', newAdmin)
+    commit('addUser', newUser)
   },
   logOut ({ commit }) {
-    commit('addAdmin', null)
+    commit('addUser', null)
     firebase.auth().signOut()
     router.go()
   },
+  createUserRoles () {
+    const roles = [
+      'Admin',
+      'Manager',
+      'Member',
+      'Customer'
+    ]
+    const ref = firebase.database().ref('roles')
+    ref.once('value')
+      .then(function (snapshot) {
+        if (!snapshot.exists()) {
+          roles.forEach(role => {
+            ref.push(role)
+          })
+        }
+      })
+  },
+
+  // loadUserRoles ({ commit }) {
+  //   firebase.database().ref('roles').once('value')
+  //     .then(data => {
+  //       const roles = []
+  //       console.log(data)
+  //       const obj = data.val()
+  //       console.log(obj)
+  //       for (const key in obj) {
+  //         roles.push({
+  //           id: key,
+  //           description: obj[key]
+  //         })
+  //       }
+  //       commit('loadUserRoles', roles)
+  //     })
+  //     .catch(error => {
+  //       console.log(error)
+  //     })
+  // },
 
   // MEMBER
-  addMember ({ commit }, payload) {
+  addMember ({ commit, dispatch }, payload) {
     const member = {
       name: payload.name,
+      membershipType: payload.membershipType,
       contact: payload.contact,
-      dateOfRegistration: payload.dateOfRegistration,
-      status: 'inactive'
+      emgContact: payload.emgContact,
+      approvalStatus: 'Pending',
+      dateOfBirth: payload.dateOfBirth,
+      occupation: payload.occupation,
+      mdclCondition: payload.mdclCondition
     }
-    let key
-    let imageUrl
+    let userId
     console.log(member)
     firebase.database().ref('members').push(member)
       .then(data => {
-        key = data.key
-        return key
-      })
-      .then(key => {
-        const filename = payload.image.name
-        const ext = filename.slice(filename.lastIndexOf('.'))
-        console.log(ext)
-        return firebase.storage().ref('members/' + key + ext).put(payload.image)
-      })
-      .then(filedata => {
-        return filedata.ref.getDownloadURL()
-      })
-      .then(data => {
-        imageUrl = data
-        return firebase.database().ref('members').child(key).update({ imageUrl: imageUrl })
+        userId = data.key
+        console.log(userId)
+        return userId
       })
       .then(() => {
         commit('addMember', {
           ...member,
-          id: key,
-          imageUrl: imageUrl
+          id: userId
         })
+        const params = {
+          id: userId,
+          role: 'Member'
+        }
+        dispatch('assignUserRoles', params)
       })
       .catch(error => {
         console.log(error)
       })
+  },
+
+  assignUserRoles ({ commit }, payload) {
+    console.log(payload)
+    const id = payload.id
+    const role = payload.role
+    let data
+    let roleId
+    const ref = firebase.database().ref('roles')
+    ref.orderByValue().equalTo(role).on('value', function (dataSnapshot) {
+      data = dataSnapshot.val()
+      roleId = Object.keys(data)[0]
+      firebase.database().ref('/users/' + roleId + '/').push(id)
+    })
   },
 
   loadMembers ({ commit }) {
@@ -78,14 +147,14 @@ export default {
       .then(data => {
         const members = []
         const obj = data.val()
+        console.log(obj)
         for (const key in obj) {
           members.push({
             name: obj[key].name,
             id: key,
             contact: obj[key].contact,
-            dateOfRegistration: obj[key].dateOfRegistration,
             status: obj[key].status,
-            imageUrl: obj[key].imageUrl
+            address: obj[key].address
           })
         }
         commit('setLoadedMembers', members)
@@ -93,5 +162,9 @@ export default {
       .catch(error => {
         console.log(error)
       })
+  },
+
+  // PAYMENT
+  addPayment ({ commit }, payload) {
   }
 }

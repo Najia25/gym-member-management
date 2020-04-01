@@ -15,22 +15,15 @@
                   <p>{{ member.name }}</p>
                   <p>Contact:</p>
                   <p>{{ member.contact }}</p>
-                  <p>Date of registration:</p>
-                  <p>{{ member.dateOfRegistration }}</p>
+                  <p>Address:</p>
+                  <p>{{ member.address }}</p>
                   <p>Status:</p>
                   <p class="status">{{ member.status }}</p>
                 </div>
               </v-list-item-content>
-              <v-list-item-avatar
-                tile
-                size="200"
-              >
-              <v-img :src="member.imageUrl"></v-img>
-              </v-list-item-avatar>
             </v-list-item>
             <v-card-actions>
               <edit-user-details-dialog></edit-user-details-dialog>
-              <v-btn color="primary" outlined>Delete user</v-btn>
             </v-card-actions>
           </v-container>
         </v-card>
@@ -43,18 +36,19 @@
               Member payments
             </v-card-subtitle>
             <v-card-text>
-              <v-form>
-                <v-text-field
-                :counter="10"
-                label="Paid amount"
-              ></v-text-field>
-              <date-picker @passDate="getDate" :expirationDate = "expirationDate"></date-picker> <!-- emit event and fetch picked date -->
+              <v-form @submit.prevent="addPayment">
+                <v-select
+                  :items="items"
+                  label="Amount to pay"
+                  outlined
+                ></v-select>
+                <date-picker @passDate="getDate" :expirationDate = "expirationDate"></date-picker> <!-- emit event and fetch picked date -->
+                <v-card-actions>
+                  <v-btn color="primary" outlined class="mb-5 mt-5" type="submit">Add payment</v-btn>
+                  <payment-history-dialog></payment-history-dialog>
+                </v-card-actions>
               </v-form>
             </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" outlined class="mb-5 mt-5">Add payment</v-btn>
-              <payment-history-dialog></payment-history-dialog>
-            </v-card-actions>
           </v-container>
         </v-card>
       </v-col>
@@ -74,17 +68,17 @@ export default {
     EditUserDetailsDialog,
     DatePicker
   },
+  props: ['id'],
   data () {
     return {
-      name: '',
-      contact: '',
-      file: null,
-      imageUrl: '',
+      items: ['500'],
       dateFormatted: null,
-      expirationDate: ''
+      expirationDate: '',
+      amount: 0,
+      PaymentDate: '',
+      NextPaymentDate: ''
     }
   },
-  props: ['id'],
   computed: {
     ...mapState(['members']),
     member () {
@@ -94,7 +88,10 @@ export default {
   },
   methods: {
     getDate (dateFormatted) {
-      console.log(dateFormatted)
+      // console.log(typeof dateFormatted)
+      // var now = new Date(dateFormatted)
+      // now.setDate(now.getDate() + 30)
+      // console.log(now)
       this.dateFormatted = dateFormatted
       const date = this.dateFormatted.split('/')
       if (Number(date[1]) > 15) {
@@ -105,6 +102,14 @@ export default {
       } else {
         this.expirationDate = 'Payment date expires today'
       }
+    },
+    addPayment () {
+      const payload = {
+        amount: this.amount,
+        PaymentDate: this.PaymentDate,
+        id: this.id
+      }
+      this.$store.dispatch('addPayment', payload)
     }
   }
 }
