@@ -1,0 +1,142 @@
+[debug] [2020-04-04T15:26:03.908Z] ----------------------------------------------------------------------
+[debug] [2020-04-04T15:26:03.911Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Asus\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2020-04-04T15:26:03.912Z] CLI Version:   8.0.1
+[debug] [2020-04-04T15:26:03.912Z] Platform:      win32
+[debug] [2020-04-04T15:26:03.912Z] Node Version:  v10.16.3
+[debug] [2020-04-04T15:26:03.913Z] Time:          Sat Apr 04 2020 21:26:03 GMT+0600 (Bangladesh Standard Time)
+[debug] [2020-04-04T15:26:03.913Z] ----------------------------------------------------------------------
+[debug] [2020-04-04T15:26:03.913Z] 
+[debug] [2020-04-04T15:26:03.930Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-04T15:26:03.931Z] > authorizing via signed-in user
+[debug] [2020-04-04T15:26:03.932Z] [iam] checking project gym-management-system-3ee92 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2020-04-04T15:26:03.937Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/gym-management-system-3ee92:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2020-04-04T15:26:05.403Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:05 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1126","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'gym-management-system-3ee92'...
+[info] 
+[info] i  deploying functions
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] +  functions: Finished running predeploy script.
+[debug] [2020-04-04T15:26:15.904Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.9.0",
+    "firebase-functions": "^3.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2020-04-04T15:26:15.908Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/gym-management-system-3ee92/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2020-04-04T15:26:15.909Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/gym-management-system-3ee92/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2020-04-04T15:26:17.671Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:17 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-04T15:26:17.759Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:17 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] +  functions: all necessary APIs are enabled
+[debug] [2020-04-04T15:26:17.784Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/gym-management-system-3ee92/adminSdkConfig  
+ 
+[debug] [2020-04-04T15:26:18.386Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:18 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2020-04-04T15:26:18.395Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/gym-management-system-3ee92/configs  
+ 
+[debug] [2020-04-04T15:26:20.030Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:20 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: packaged functions (40.36 KB) for uploading
+[debug] [2020-04-04T15:26:20.502Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/gym-management-system-3ee92/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2020-04-04T15:26:21.353Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:26:21 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-04T15:26:21.355Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-3c6cbf1e-bc9e-4776-af39-845906988a6a/e851b2a4-d366-4fca-818f-f311384dc743.zip?GoogleAccessId=service-850584772597@gcf-admin-robot.iam.gserviceaccount.com&Expires=1586015781&Signature=Qjmkh0gIm86KlDd6%2B5Erbg426eF9uj1%2FX2PJSSYelhL%2F1BetpT%2F4j9kLwi0VdJWDTXWHMJv6yoQgFhxDBwdhkFXmKqGxIVEYXPP16eTGkzgNRn86oKcUIbL8%2FOcoxB3HBT6Mp607nU8x2C8IBcbE7VfknpPF40BMiQGoQJeThFKAGhLfbV6RGGKsjNfSNG0VQOR9gLGa6fpC7%2BfJ%2Fc9XPM4e0lUHXcl8MVY1P5w9fcR1m%2FZeH5dSaIOrF56Fpc%2BOb4o0wK9I9yycFR1AHeTISwQKr6WP8Ab2H0hK5BBysnvGWiw4fNrCyL%2Fz%2FPhgHMcMt1yd0wC%2BR9aLqoHQiS2R%2BA%3D%3D  
+ <request body omitted>
+[warn] !  functions: Upload Error: Server Error. read ECONNRESET
+[debug] [2020-04-04T15:26:40.642Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-04-04T15:49:53.662Z] ----------------------------------------------------------------------
+[debug] [2020-04-04T15:49:53.665Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Asus\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2020-04-04T15:49:53.666Z] CLI Version:   8.0.1
+[debug] [2020-04-04T15:49:53.666Z] Platform:      win32
+[debug] [2020-04-04T15:49:53.666Z] Node Version:  v10.16.3
+[debug] [2020-04-04T15:49:53.667Z] Time:          Sat Apr 04 2020 21:49:53 GMT+0600 (Bangladesh Standard Time)
+[debug] [2020-04-04T15:49:53.667Z] ----------------------------------------------------------------------
+[debug] [2020-04-04T15:49:53.667Z] 
+[debug] [2020-04-04T15:49:53.677Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-04T15:49:53.677Z] > authorizing via signed-in user
+[debug] [2020-04-04T15:49:53.678Z] [iam] checking project gym-management-system-3ee92 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2020-04-04T15:49:53.681Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/gym-management-system-3ee92:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2020-04-04T15:49:55.151Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:49:55 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1137","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'gym-management-system-3ee92'...
+[info] 
+[info] i  deploying functions
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] +  functions: Finished running predeploy script.
+[debug] [2020-04-04T15:49:59.780Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.9.0",
+    "firebase-functions": "^3.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2020-04-04T15:49:59.783Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/gym-management-system-3ee92/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2020-04-04T15:49:59.784Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/gym-management-system-3ee92/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2020-04-04T15:50:01.521Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:50:01 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-04T15:50:01.561Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:50:01 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] +  functions: all necessary APIs are enabled
+[debug] [2020-04-04T15:50:01.565Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/gym-management-system-3ee92/adminSdkConfig  
+ 
+[debug] [2020-04-04T15:50:02.146Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:50:02 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2020-04-04T15:50:02.160Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/gym-management-system-3ee92/configs  
+ 
+[debug] [2020-04-04T15:50:02.709Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:50:02 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: packaged functions (40.37 KB) for uploading
+[debug] [2020-04-04T15:50:02.922Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/gym-management-system-3ee92/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2020-04-04T15:50:03.920Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 04 Apr 2020 15:50:04 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-04T15:50:03.922Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-3c6cbf1e-bc9e-4776-af39-845906988a6a/573c10ad-3802-4ca7-ae62-5624981eb2b2.zip?GoogleAccessId=service-850584772597@gcf-admin-robot.iam.gserviceaccount.com&Expires=1586017203&Signature=Y4%2FwCPR923ts4JtMp7Qg7bxbIJAokvA%2Fy3d0VGBHcXsRQ4CakUHs%2B8%2F8onzY0hTny1YTzSJkZGZIfSc5w0oPILH%2FM3xOJ9BlRCrkOYQUfo8MFkcH1MT6ZFHzg98MVBCMh6XliymoosX%2BtUM8RfRxambLU5OYfw8dsvf0%2FbfBp6ieN07YU4%2BREVVCxFPnAz5X1kziMwcmu2m3NoiYzjcRdMdv9GYkqnyu%2Fv4wnJJ4jNpH7bkT%2FPiVnjljQXYVUr%2B%2FM%2FHhakokZtwJVlnGhwGoCaJIUoFNB267bionzD7drEJx1Rxapn%2B1PKXYzM6kzVGsSNTPqpE4EOsDF9RcWV9dZw%3D%3D  
+ <request body omitted>
+[warn] !  functions: Upload Error: Server Error. read ECONNRESET
+[debug] [2020-04-04T15:50:23.169Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET

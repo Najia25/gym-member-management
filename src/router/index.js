@@ -5,7 +5,7 @@ import Signin from '../views/Signin.vue'
 import Registration from '../views/Registration.vue'
 import User from '../views/User.vue'
 import Admin from '../views/Admin.vue'
-import AdminSignUp from '../views/AdminSignUp.vue'
+import Signup from '../views/Signup.vue'
 import AuthGuard from './auth-guard'
 
 Vue.use(VueRouter)
@@ -41,9 +41,9 @@ const routes = [
     component: Admin
   },
   {
-    path: '/admin/signup',
-    name: 'AdminSignUp',
-    component: AdminSignUp
+    path: '/signup',
+    name: 'Signup',
+    component: Signup
   }
 ]
 

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col col="12" sm="6" class="mx-auto">
-        <signup-form></signup-form>
+        <signup-form>Add staff</signup-form>
       </v-col>
     </v-row>
   </v-container>

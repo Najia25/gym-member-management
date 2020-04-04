@@ -1,7 +1,7 @@
 <template>
   <v-card class="mt-5">
     <v-card-title>
-      Add staff
+      <slot>Sign Up</slot>
     </v-card-title>
     <v-card-text>
       <v-container>

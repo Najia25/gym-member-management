@@ -18,7 +18,7 @@ export default {
           }
           console.log(newUser.id)
           commit('addUser', newUser)
-          dispatch('assignUserRoles', newUser)
+          // dispatch('assignUserRoles', newUser)
         }
       )
       .catch(error => {
@@ -117,11 +117,11 @@ export default {
           ...member,
           id: userId
         })
-        const params = {
-          id: userId,
-          role: 'Member'
-        }
-        dispatch('assignUserRoles', params)
+        // const params = {
+        //   id: userId,
+        //   role: 'Member'
+        // }
+        // dispatch('assignUserRoles', params)
       })
       .catch(error => {
         console.log(error)
