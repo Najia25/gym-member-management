@@ -11,9 +11,20 @@
 
 <script>
 import SignupForm from '../components/SignupForm'
+import { mapState } from 'vuex'
 export default {
   components: {
     SignupForm
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  watch: {
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/')
+      }
+    }
   },
   methods: {
     onSignUp (payload) {

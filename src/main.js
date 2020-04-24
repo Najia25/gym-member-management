@@ -22,13 +22,13 @@ new Vue({
       messagingSenderId: '850584772597',
       appId: '1:850584772597:web:0e0eb51a1216bbcf380abc'
     })
-
     firebase.auth().onAuthStateChanged(data => {
       if (data) {
-        this.$store.dispatch('autoSignIn', data)
+        this.$store.dispatch('fetchUserRole', data.uid)
       }
     })
+    // this.$store.dispatch('fetchAdmin')
     this.$store.dispatch('loadMembers')
-    // this.$store.dispatch('createUserRoles')
+    this.$store.dispatch('adminExists')
   }
 }).$mount('#app')

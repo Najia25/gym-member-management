@@ -11,6 +11,7 @@
           <v-select
             v-if="!isAdminSignup"
             label="Staff type"
+            :items="staffTypes"
             v-model="staffType"
             outlined
           ></v-select>
@@ -51,7 +52,7 @@
 <script>
 export default {
   name: 'signup-form',
-  props: ['isAdminSignup'],
+  props: ['isAdminSignup', 'staffTypes'],
   data () {
     return {
       show1: true,
@@ -81,9 +82,18 @@ export default {
   },
   methods: {
     onSignUp () {
-      const payload = {
-        email: this.email,
-        password: this.password
+      let payload
+      if (this.staffType) {
+        payload = {
+          email: this.email,
+          password: this.password,
+          role: this.staffType
+        }
+      } else {
+        payload = {
+          email: this.email,
+          password: this.password
+        }
       }
       this.$emit('onSignUp', payload)
       // this.$store.dispatch('signUpUser', { email: this.email, password: this.password })

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col col="12" sm="6" class="mx-auto">
-        <signup-form>Add staff</signup-form>
+        <signup-form :staffTypes="staffTypes" @onSignUp="onSignUp">Add staff</signup-form>
       </v-col>
     </v-row>
   </v-container>
@@ -27,7 +27,7 @@ export default {
         // ...use || operator
         // const var2 = var1 || "something"; here var1 is not a boolean value
       },
-      staffType: ''
+      staffTypes: ['Manager']
     }
   },
   computed: {
@@ -54,8 +54,13 @@ export default {
   //   }
   // },
   methods: {
-    onSignUp () {
-      this.$store.dispatch('signUpUser', { email: this.email, password: this.password })
+    onSignUp (payload) {
+      payload = {
+        ...payload,
+        role: payload.role
+      }
+      console.log(payload)
+      this.$store.dispatch('signUpUser', payload)
     },
     onDismissed () {
       this.$store.dispatch('clearError')

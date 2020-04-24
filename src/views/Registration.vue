@@ -2,7 +2,7 @@
   <v-container>
 		<v-row>
 			<v-col cols="12" sm="8" class="mx-auto">
-				<v-card>
+				<v-card class="mb-5">
           <v-container>
             <v-card-title>Add New Members</v-card-title>
             <v-card-text>
@@ -44,6 +44,25 @@
                     v-model="mdclCondition"
                     label="Medical Conditions (if any)"
                   ></v-textarea>
+                  <v-card outlined class="mb-5">
+                    <v-container>
+                      <v-card-title>Membership fee payment</v-card-title>
+                      <v-card-text>
+                          <v-text-field
+                            :counter="4"
+                            label="Paid amount"
+                            type="number"
+                            v-model="membershipFeeAmount"
+                          ></v-text-field>
+                          <!-- <v-text-field
+                            :counter="4"
+                            label="Due amount"
+                            type="number"
+                          ></v-text-field> -->
+                          <date-picker @passDate="getMembershipFeeDate"></date-picker> <!-- emit event and fetch picked date -->
+                      </v-card-text>
+                    </v-container>
+                  </v-card>
                   <v-card-actions>
                     <v-btn color="primary" large class="mx-auto mb-5" type="submit">Add Member</v-btn>
                   </v-card-actions>
@@ -58,11 +77,13 @@
 
 <script>
 import DatePicker from '../components/DatePicker.vue'
+import { mapState } from 'vuex'
 export default {
   components: {
     DatePicker
   },
   computed: {
+    ...mapState(['user']),
     formIsValid () {
       return this.name !== '' &&
       this.contact !== '' &&
@@ -72,14 +93,16 @@ export default {
   data () {
     return {
       items: ['Life Time'],
-      dateOfBirth: null,
+      dateOfBirth: '',
+      membershipFeeDate: '',
       name: '',
       contact: 0,
       emgContact: 0,
       occupation: '',
-      mdclCondition: '',
-      approvalStatus: '',
+      mdclCondition: 'None',
       membershipType: '',
+      membershipFeeAmount: 0,
+      status: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -90,21 +113,32 @@ export default {
       // if (!this.formIsValid) {
       // return
       // }
+      if (this.user.role === 'Manager') {
+        this.status = 'Pending'
+      }
+      if (this.user.role === 'Admin') {
+        this.status = 'Active'
+      }
       const payload = {
         name: this.name,
         contact: this.contact,
         emgContact: this.emgContact,
         occupation: this.occupation,
         mdclCondition: this.mdclCondition,
-        approvalStatus: this.approvalStatus,
         membershipType: this.membershipType,
-        dateOfBirth: this.dateOfBirth
+        dateOfBirth: this.dateOfBirth,
+        membershipFeeAmount: this.membershipFeeAmount,
+        membershipFeeDate: this.membershipFeeDate,
+        status: this.status
       }
       console.log(payload)
       this.$store.dispatch('addMember', payload)
     },
     getDate (dateFormatted) {
       this.dateOfBirth = dateFormatted
+    },
+    getMembershipFeeDate (membershipFeeDate) {
+      this.membershipFeeDate = membershipFeeDate
     }
   }
   // computed: {
