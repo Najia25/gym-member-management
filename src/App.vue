@@ -1,20 +1,38 @@
 <template>
   <v-app>
-    <div class="logo primary">
-      <router-link to="/" tag="span" style="cursor: pointer">
-        <img src="@/assets/logo.png"/>
-      </router-link>
-    </div>
-    <v-navigation-drawer v-model="sideNav" app dark>
-      <v-list>
-        <div class="online text-center">
+    <v-navigation-drawer v-model="sideNav"
+    app
+    dark
+    mobile-break-point="960"
+    width="230"
+    :mini-variant.sync="mini"
+    >
+    <v-list>
+      <v-list-item class="primary justify-center" two-line >
+        <img src="@/assets/logo.png" v-if="!mini" />
+        <img src="@/assets/logo.png" class="shrink-width" v-else />
+      </v-list-item>
+    </v-list>
+
+    <v-list three-line v-if="!mini">
+      <v-list-item class="text-center online">
+        <v-list-item-content>
           <v-icon>mdi-account-circle</v-icon>
+          <v-list-item-title class="role">Manager</v-list-item-title>
+          <v-list-item-subtitle class="mt-2 status">online</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+
+      <v-list
+      expand
+      >
+        <!-- <div class="online text-center">
           <p class="role">Manager</p>
           <small>online</small>
-        </div>
-        <v-list-item-group>
+        </div> -->
 
-          <v-list-item link v-for="item in menuItems" :key="item.title" :to="item.link">
+          <v-list-item link v-for="item in menuItems" :key="item.title" :to="item.link" active-class="yellow--text text--accent-4 active-nav-link">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -23,7 +41,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item @click="onLogout">
+          <v-list-item @click="onLogout" active-class="black yellow--text text--accent-4">
             <v-list-item-icon>
               <v-icon> mdi-logout-variant </v-icon>
             </v-list-item-icon>
@@ -32,12 +50,11 @@
             </v-list-item-content>
           </v-list-item>
 
-        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app>
-      <v-app-bar-nav-icon class="visible-md-and-up"></v-app-bar-nav-icon >
+      <v-app-bar-nav-icon class="visible-md-and-up ml-1" @click.stop="mini = !mini"></v-app-bar-nav-icon >
       <v-app-bar-nav-icon @click ="sideNav = !sideNav" class="hidden-md-and-up"></v-app-bar-nav-icon >
     </v-app-bar>
 
@@ -57,7 +74,8 @@ export default {
   },
 
   data: () => ({
-    sideNav: true
+    sideNav: true,
+    mini: false
   }),
   computed: {
     ...mapState(['user', 'adminExists']),
@@ -96,31 +114,25 @@ export default {
 </script>
 
 <style>
-
-/* header.primary.v-sheet.v-sheet--tile.theme--dark.v-toolbar.v-app-bar.v-app-bar--fixed {
-  left:  0px !important;
-  z-index: 6;
-} */
-nav.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--open.theme--dark {
-  top: 50px !important;
-  width:230px !important;
+.shrink-width {
+  width:56px;
+}
+.active-nav-link {
+  border-left:2px solid yellow;
+  background: black;
 }
 .theme--dark.v-navigation-drawer {
   background-color: #191818;
 }
-.v-list-item-group .theme--dark.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-    color: #ffffffa6 !important;
-}
+
 .v-list.v-sheet.v-sheet--tile.theme--dark {
   padding: 0px;
 }
 .v-list-item__title {
   font-size: .875rem;
 }
-.v-list-item__icon .theme--dark.v-icon {
-  color: #ffffffa6 !important;
-}
-.v-list-item-group .v-list-item .v-list-item__icon {
+
+.v-list-item .v-list-item__icon {
   margin-right: 10px !important;
 }
 .v-icon.v-icon {
@@ -129,15 +141,8 @@ nav.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--open.the
 .theme--light.v-app-bar.v-toolbar.v-sheet {
   background-color: #191818 !important;
   color: #ffd600;
-  left:230px !important;
-  height: 50px !important;
 }
-.v-toolbar__content {
-  height: 50px !important;
-}
-.v-content {
-  padding: 50px 0px 0px 230px !important;
-}
+
 .v-content__wrap {
   background: #8080801a;
 }
@@ -153,7 +158,7 @@ nav.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--open.the
   height: 50px;
   line-height: 80px;
 }
-p.role {
+.role {
     font-size: .89rem;
     color: #bab5b5;
     font-weight: 700;
@@ -162,66 +167,44 @@ p.role {
     margin-bottom: .5px !important;
 }
 .online {
-    /* font-size: 2rem; */
-    padding: 1rem;
     background: #0000004f;
     line-height: 22px;
 }
 i.v-icon.notranslate.mdi.mdi-account-circle.theme--dark {
-    color: #ffd600;
-    font-size: 1.5rem !important;
+  color: #ffd600;
+  font-size: 1.5rem !important;
 }
-small {
+.status {
   position: relative;
 }
-small::after {
+.status::after {
     position: absolute;
     content: "";
     width: 10px;
     height: 10px;
     top: 2px;
-    left: -15px;
+    left: 62px;
     background: #0cae0c;
     border-radius: 100%;
     border: 1px solid #0cae0c;
 }
-.logo img {
-  width:103px;
-}
+
 i.v-icon.notranslate.mdi.mdi-menu.theme--light {
   font-size: 34px !important;
 }
 .theme--light.v-btn.v-btn--icon {
   color: #ffd600 !important;
 }
-a.v-item--active.v-list-item--active.v-list-item.v-list-item--link.theme--dark {
-  background: #191818 !important;
-  border-left: 2px solid #ffd600;
-}
-.v-item--active .v-list-item__icon .theme--dark.v-icon {
-    color: yellow !important;
-}
-.v-list-item--active .v-list-item__content {
-  color: #ffd600;
-}
 
 .theme--dark.v-list-item--active:hover::before, .theme--dark.v-list-item--active::before {
   opacity: 0 !important;
-  background-color: none;
 }
 
-/* @media screen and (max-width: 960px) {
-  nav.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--open.theme--dark {
-    top: 55px !important;
-  }
-} */
 @media (max-width: 59.999em) {
   .v-application .visible-md-and-up {
     display: none !important;
   }
-    nav.v-navigation-drawer.v-navigation-drawer--close.v-navigation-drawer--fixed.v-navigation-drawer--is-mobile.theme--dark {
-    transform: translateX(-100%) !important;
-  }
+
 }
 /* @media (min-width: 59.999em) {
 
