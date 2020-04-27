@@ -9,8 +9,7 @@
     >
     <v-list>
       <v-list-item class="primary justify-center" two-line >
-        <img src="@/assets/logo.png" v-if="!mini" />
-        <img src="@/assets/logo.png" class="shrink-width" v-else />
+        <img src="@/assets/logo.png" :class="{ 'shrink-width': mini }"/>
       </v-list-item>
     </v-list>
 
@@ -34,7 +33,7 @@
 
           <v-list-item link v-for="item in menuItems" :key="item.title" :to="item.link" active-class="yellow--text text--accent-4 active-nav-link">
             <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon :class="{ 'large-icon': mini }">{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -114,6 +113,9 @@ export default {
 </script>
 
 <style>
+.large-icon {
+  font-size: 1.75rem !important;
+}
 .shrink-width {
   width:56px;
 }
@@ -136,7 +138,7 @@ export default {
   margin-right: 10px !important;
 }
 .v-icon.v-icon {
-  font-size: 21px !important;
+  font-size: 21px;
 }
 .theme--light.v-app-bar.v-toolbar.v-sheet {
   background-color: #191818 !important;
