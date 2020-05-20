@@ -1,7 +1,10 @@
 export default {
   user: null,
-  members: [],
   adminExists: false,
   error: null,
-  loading: false
+  loading: false,
+  success: false,
+  approvedMembers: [],
+  pendingMembers: [],
+  staffs: []
 }

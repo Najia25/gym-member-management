@@ -1,0 +1,29 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col col="12" sm="6" class="mx-auto">
+        <signup-form :staffTypes="staffTypes" @onSignUp="addStaff">Add staff</signup-form>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import SignupForm from '@/components/SignupForm'
+export default {
+  components: {
+    SignupForm
+  },
+  data () {
+    return {
+      staffTypes: ['Manager', 'Admin']
+    }
+  },
+  methods: {
+    addStaff (payload) {
+      console.log(payload)
+      this.$store.dispatch('addStaff', payload)
+    }
+  }
+}
+</script>

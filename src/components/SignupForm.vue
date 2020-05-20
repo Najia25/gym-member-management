@@ -1,5 +1,11 @@
 <template>
   <v-card class="mt-5">
+    <v-alert type="error" dismissible @input="onDismissed" text v-if="error">
+      {{ error.message }}
+    </v-alert>
+    <v-alert type="success" dismissible @input="onDismissed" text v-if="success">
+      Staff Added successfully.
+    </v-alert>
     <v-card-title>
       <slot>Sign Up</slot>
     </v-card-title>
@@ -15,6 +21,13 @@
             v-model="staffType"
             outlined
           ></v-select>
+          <v-text-field class="mb-5"
+            v-if="!isAdminSignup"
+            v-model="name"
+            label="Name"
+            name="name"
+            :rules="[rules.required]"
+          ></v-text-field>
           <v-text-field class="mb-5"
             v-model="email"
             label="Email"
@@ -41,7 +54,7 @@
             :rules="[rules.required,passwordMatch]"
           ></v-text-field>
           <v-card-actions>
-            <v-btn class="primary mt-2" type="submit">Add</v-btn>
+            <v-btn class="primary mt-2" type="submit" v-if="formIsValid">Add</v-btn>
           </v-card-actions>
         </v-form>
       </v-container>
@@ -50,6 +63,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'signup-form',
   props: ['isAdminSignup', 'staffTypes'],
@@ -57,19 +71,25 @@ export default {
     return {
       show1: true,
       show2: true,
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
       rules: {
-        required: value => !!value || 'Required.' // UNDERSTAND
-        // const var2 = var1 ? var1 : "something";
-        // ...use || operator
-        // const var2 = var1 || "something"; here var1 is not a boolean value
+        required: value => !!value || 'Required.'
       },
       staffType: ''
     }
   },
   computed: {
+    ...mapState(['error', 'success']),
+    formIsValid () {
+      return this.name !== '' &&
+      this.email !== '' &&
+      this.password !== '' &&
+      this.confirmPassword !== '' &&
+      this.password === this.confirmPassword
+    },
     passwordMatch () {
       return this.password !== this.confirmPassword ? "Passwords don't match" : true
     }
@@ -85,9 +105,10 @@ export default {
       let payload
       if (this.staffType) {
         payload = {
+          name: this.name,
+          type: this.staffType,
           email: this.email,
-          password: this.password,
-          role: this.staffType
+          password: this.password
         }
       } else {
         payload = {
@@ -96,10 +117,13 @@ export default {
         }
       }
       this.$emit('onSignUp', payload)
-      // this.$store.dispatch('signUpUser', { email: this.email, password: this.password })
     },
     onDismissed () {
-      this.$store.dispatch('clearError')
+      if (this.error) {
+        this.$store.dispatch('clearError')
+      } else if (this.success) {
+        this.$store.dispatch('clearSuccess')
+      }
     }
   }
 }

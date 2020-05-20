@@ -23,24 +23,42 @@
       </v-list-item>
     </v-list>
 
-      <v-list
-      expand
-      >
-        <!-- <div class="online text-center">
-          <p class="role">Manager</p>
-          <small>online</small>
-        </div> -->
-
-          <v-list-item link v-for="item in menuItems" :key="item.title" :to="item.link" active-class="yellow--text text--accent-4 active-nav-link">
+      <v-list>
+          <v-list-item  to="/" v-if="this.userIsAuthenticated">
             <v-list-item-icon>
-              <v-icon :class="{ 'large-icon': mini }">{{ item.icon }}</v-icon>
+              <v-icon> mdi-home-outline </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title> Home </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+      <v-list-group
+        v-for="item in menuItems"
+        :key="item.title"
+        no-action
+        active-class="active-control"
+      >
+        <template v-slot:activator>
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
 
-          <v-list-item @click="onLogout" active-class="black yellow--text text--accent-4">
+          <v-list-item
+            v-for="subItem in item.items"
+            :key="subItem.title"
+            :to="subItem.link"
+          >
+
+            <v-list-item-content>
+              <v-list-item-title v-text="subItem.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+      </v-list-group>
+          <v-list-item @click="onLogout" v-if="this.userIsAuthenticated">
             <v-list-item-icon>
               <v-icon> mdi-logout-variant </v-icon>
             </v-list-item-icon>
@@ -48,7 +66,6 @@
               <v-list-item-title> Logout </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
       </v-list>
     </v-navigation-drawer>
 
@@ -82,9 +99,30 @@ export default {
       let menuItems
       if (this.userIsAuthenticated) {
         menuItems = [
-          { icon: 'mdi-home-outline', title: 'Home', link: '/' },
-          { icon: 'mdi-account-plus-outline', title: 'Registration', link: '/registration' },
-          { icon: 'mdi-account-outline', title: 'Profile', link: '/profile' }
+          {
+            icon: 'mdi-account-multiple-outline',
+            title: 'Members',
+            items: [
+              { title: 'Approved Members', link: '/members/active-members' },
+              { title: 'Pending Members', link: '/members/pending-members' },
+              { title: 'Add Members', link: '/members/add-member' }
+            ]
+          },
+          {
+            icon: 'mdi-currency-usd',
+            title: 'Payments',
+            items: [
+              { title: 'Pending Payments' }
+            ]
+          },
+          {
+            icon: 'mdi-account-outline',
+            title: 'Staff',
+            items: [
+              { title: 'Staff List', link: '/staff/staff-list' },
+              { title: 'Add Staff', link: '/staff/add-staff' }
+            ]
+          }
         ]
       } else {
         if (this.adminExists) {
@@ -113,15 +151,12 @@ export default {
 </script>
 
 <style>
-.large-icon {
-  font-size: 1.75rem !important;
+.active-control {
+  background: black;
 }
 .shrink-width {
   width:56px;
-}
-.active-nav-link {
-  border-left:2px solid yellow;
-  background: black;
+  height: 34px;
 }
 .theme--dark.v-navigation-drawer {
   background-color: #191818;
@@ -138,7 +173,7 @@ export default {
   margin-right: 10px !important;
 }
 .v-icon.v-icon {
-  font-size: 21px;
+  font-size: 20px !important;
 }
 .theme--light.v-app-bar.v-toolbar.v-sheet {
   background-color: #191818 !important;
@@ -161,16 +196,16 @@ export default {
   line-height: 80px;
 }
 .role {
-    font-size: .89rem;
-    color: #bab5b5;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-top: 8px;
-    margin-bottom: .5px !important;
+  font-size: .89rem;
+  color: #bab5b5;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 8px;
+  margin-bottom: .5px !important;
 }
 .online {
-    background: #0000004f;
-    line-height: 22px;
+  background: #0000004f;
+  line-height: 22px;
 }
 i.v-icon.notranslate.mdi.mdi-account-circle.theme--dark {
   color: #ffd600;
@@ -180,15 +215,15 @@ i.v-icon.notranslate.mdi.mdi-account-circle.theme--dark {
   position: relative;
 }
 .status::after {
-    position: absolute;
-    content: "";
-    width: 10px;
-    height: 10px;
-    top: 2px;
-    left: 62px;
-    background: #0cae0c;
-    border-radius: 100%;
-    border: 1px solid #0cae0c;
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  top: 2px;
+  left: 55px;
+  background: #0cae0c;
+  border-radius: 100%;
+  border: 1px solid #0cae0c;
 }
 
 i.v-icon.notranslate.mdi.mdi-menu.theme--light {
@@ -202,14 +237,20 @@ i.v-icon.notranslate.mdi.mdi-menu.theme--light {
   opacity: 0 !important;
 }
 
+.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
+    padding-left: 49px !important;
+}
+
+.mdi-chevron-down::before {
+  display: none;
+}
+
 @media (max-width: 59.999em) {
   .v-application .visible-md-and-up {
     display: none !important;
   }
-
 }
 /* @media (min-width: 59.999em) {
-
 } */
 
 </style>

@@ -4,7 +4,7 @@
 			<v-col cols="12" sm="8" class="mx-auto">
 				<v-card class="mb-5">
           <v-container>
-            <v-card-title>Add New Members</v-card-title>
+            <v-card-title>Add New Member</v-card-title>
             <v-card-text>
                 <v-form @submit.prevent="addMember" ref="form">
                   <v-select
@@ -59,7 +59,7 @@
                             label="Due amount"
                             type="number"
                           ></v-text-field> -->
-                          <date-picker @passDate="getMembershipFeeDate"></date-picker> <!-- emit event and fetch picked date -->
+                          <date-picker @passDate="getMembershipFeeDate" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
                       </v-card-text>
                     </v-container>
                   </v-card>
@@ -69,6 +69,13 @@
                 </v-form>
             </v-card-text>
           </v-container>
+          <!-- <v-alert type="error" dismissible @input="onDismissed" text v-if="error">
+            {{ error.message }}
+          </v-alert>
+          <v-alert type="success" dismissible text v-if="success">
+            bla bla shit
+          </v-alert> -->
+        <SnackBar></SnackBar>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -76,25 +83,28 @@
 </template>
 
 <script>
-import DatePicker from '../components/DatePicker.vue'
+import DatePicker from '@/components/DatePicker.vue'
+import SnackBar from '@/components/SnackBar.vue'
 import { mapState } from 'vuex'
 export default {
   components: {
-    DatePicker
+    DatePicker,
+    SnackBar
   },
   computed: {
-    ...mapState(['user']),
-    formIsValid () {
-      return this.name !== '' &&
-      this.contact !== '' &&
-      this.address !== ''
-    }
+    ...mapState(['user', 'error', 'success'])
+
+    // formIsValid () {
+    //   return this.name !== '' &&
+    //   this.contact !== '' &&
+    //   this.address !== ''
+    // }
   },
   data () {
     return {
       items: ['Life Time'],
-      dateOfBirth: '',
-      membershipFeeDate: '',
+      dateOfBirth: new Date().toISOString().substr(0, 10),
+      membershipFeeDate: new Date().toISOString().substr(0, 10),
       name: '',
       contact: 0,
       emgContact: 0,
@@ -102,10 +112,11 @@ export default {
       mdclCondition: 'None',
       membershipType: '',
       membershipFeeAmount: 0,
-      status: '',
+      status: 0,
       rules: {
         required: value => !!value || 'Required.'
-      }
+      },
+      timeOut: 0
     }
   },
   methods: {
@@ -113,12 +124,12 @@ export default {
       // if (!this.formIsValid) {
       // return
       // }
-      if (this.user.role === 'Manager') {
-        this.status = 'Pending'
-      }
-      if (this.user.role === 'Admin') {
-        this.status = 'Active'
-      }
+      // if (this.user.role === 'Manager') {
+      //   this.status = 'Pending'
+      // }
+      // if (this.user.role === 'Admin') {
+      //   this.status = 'Active'
+      // }
       const payload = {
         name: this.name,
         contact: this.contact,
@@ -134,8 +145,8 @@ export default {
       console.log(payload)
       this.$store.dispatch('addMember', payload)
     },
-    getDate (dateFormatted) {
-      this.dateOfBirth = dateFormatted
+    getDate (date) {
+      this.dateOfBirth = date
     },
     getMembershipFeeDate (membershipFeeDate) {
       this.membershipFeeDate = membershipFeeDate

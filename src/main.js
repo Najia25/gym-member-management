@@ -28,7 +28,6 @@ new Vue({
       }
     })
     // this.$store.dispatch('fetchAdmin')
-    this.$store.dispatch('loadMembers')
     this.$store.dispatch('adminExists')
   }
 }).$mount('#app')

@@ -6,9 +6,6 @@ export default {
   adminExists (state, payload) {
     state.adminExists = payload
   },
-  addMember (state, payload) {
-    state.members.push(payload)
-  },
   updateMemberData (state, payload) {
     const member = state.members.find(data => {
       return data.id === payload.id
@@ -45,7 +42,25 @@ export default {
       member.status = payload.status
     }
   },
-  setLoadedMembers (state, payload) {
-    state.members = payload
+  updatePendingMembers (state, payload) {
+    state.pendingMembers.splice(state.pendingMembers.findIndex(member => member.id === payload), 1)
+  },
+  setApprovedMembers (state, payload) {
+    state.approvedMembers = payload
+  },
+  setPendingMembers (state, payload) {
+    state.pendingMembers = payload
+  },
+  setStaffs (state, payload) {
+    state.staffs = payload
+  },
+  setError (state, payload) {
+    state.error = payload
+  },
+  setSuccess (state, payload) {
+    state.success = payload
+  },
+  clearError (state) {
+    state.error = null
   }
 }

@@ -76,9 +76,9 @@
 </template>
 
 <script>
-import PaymentHistoryDialog from '../components/PaymentHistoryDialog.vue'
-import EditUserDetailsDialog from '../components/EditUserDetailsDialog.vue'
-import DatePicker from '../components/DatePicker.vue'
+import PaymentHistoryDialog from '@/components/PaymentHistoryDialog.vue'
+import EditUserDetailsDialog from '@/components/EditUserDetailsDialog.vue'
+import DatePicker from '@/components/DatePicker.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -105,7 +105,6 @@ export default {
 
     // },
     // developmentFee () {
-      
     // },
     // need to fix, todays date has to be system date
     daysLeftToExpire () {

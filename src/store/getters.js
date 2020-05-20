@@ -1,19 +1,20 @@
 export default {
-  loadMember (state) {
-    return (memberId) => {
-      return state.members.find((member) => {
-        return member.id === memberId
+  loadMember: (state) => (payload) => {
+    // return (memberId) => {
+    //   return state.pendingMembers.find((member) => {
+    //     return member.id === memberId
+    //   })
+    // }
+    if (payload.status === 0) {
+      if (state.pendingMembers.filter(member => member.id === payload.id).length > 0) {
+        return state.pendingMembers.find(member => {
+          return member.id === payload.id
+        })
+      }
+    } else {
+      return state.approvedMembers.find(member => {
+        return member.id === payload.id
       })
     }
-  },
-  loadActiveMembers (state) {
-    return state.members.filter(member => {
-      return member.status === 'Active' || member.status === 'Inactive'
-    })
-  },
-  loadPendingMembers (state) {
-    return state.members.filter(member => {
-      return member.status === 'Pending'
-    })
   }
 }

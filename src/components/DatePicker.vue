@@ -8,14 +8,14 @@
     max-width="290px"
     min-width="290px"
       >
+      <!-- @blur="date = parseDate(dateFormatted)" -->
       <template v-slot:activator="{ on }">
         <v-text-field
-        v-model="dateFormatted"
+        v-model="date"
         :label="label ? label : 'Date'"
         :hint="expirationDate ? expirationDate : ''"
         persistent-hint
         prepend-icon="mdi-calendar"
-        @blur="date = parseDate(dateFormatted)"
         readonly
         v-on="on"
         ></v-text-field>
@@ -32,31 +32,17 @@ export default {
   data () {
     return {
       date: new Date().toISOString().substr(0, 10),
-      dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
       menu: false
     }
   },
   // try making it computed and pass down s prop assuming props are reactive.
   watch: {
     date () {
-      this.dateFormatted = this.formatDate(this.date)
-      this.$emit('passDate', this.dateFormatted)
+      this.$emit('passDate', this.date)
     }
   },
   mounted () {
-    this.$emit('passDate', this.dateFormatted)
-  },
-  methods: {
-    formatDate (date) {
-      if (!date) return null
-      const [year, month, day] = date.split('-')
-      return `${month}/${day}/${year}`
-    },
-    parseDate (date) {
-      if (!date) return null
-      const [month, day, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
+    this.$emit('passDate', this.date)
   }
 }
 </script>
