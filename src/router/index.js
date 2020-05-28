@@ -8,9 +8,8 @@ import AddMember from '../views/Members/AddMember.vue'
 import Member from '../views/Members/Member.vue'
 import PendingPayments from '../views/Payments/PendingPayments.vue'
 import AddStaff from '../views/Staff/AddStaff.vue'
-import Staff from '../views/Staff/Staff.vue'
 import StaffList from '../views/Staff/StaffList.vue'
-import Signup from '../views/Signup.vue'
+import Signup from '@/Signup.vue'
 import AuthGuard from './auth-guard'
 
 Vue.use(VueRouter)
@@ -59,13 +58,6 @@ const routes = [
     beforeEnter: AuthGuard
   },
   {
-    path: '/staffs/:id',
-    name: 'staff',
-    component: Staff,
-    props: true,
-    beforeEnter: AuthGuard
-  },
-  {
     path: '/members/:id',
     name: 'member',
     component: Member,
@@ -80,8 +72,7 @@ const routes = [
   {
     path: '/signup',
     name: 'Signup',
-    component: Signup,
-    beforeEnter: AuthGuard
+    component: Signup
   }
 ]
 

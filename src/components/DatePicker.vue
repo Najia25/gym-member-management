@@ -13,7 +13,6 @@
         <v-text-field
         v-model="date"
         :label="label ? label : 'Date'"
-        :hint="expirationDate ? expirationDate : ''"
         persistent-hint
         prepend-icon="mdi-calendar"
         readonly
@@ -28,19 +27,37 @@
 
 export default {
   name: 'date-picker',
-  props: ['expirationDate', 'label'],
+  props: ['label', 'membershipFeeDate', 'dateOfBirth', 'expire_date', 'paid_date'],
   data () {
     return {
-      date: new Date().toISOString().substr(0, 10),
       menu: false
     }
   },
-  // try making it computed and pass down s prop assuming props are reactive.
-  watch: {
-    date () {
-      this.$emit('passDate', this.date)
+  computed: {
+    date: {
+      get () {
+        if (this.membershipFeeDate) {
+          return this.membershipFeeDate
+        } else if (this.dateOfBirth) {
+          return this.dateOfBirth
+        } else if (this.expire_date) {
+          return this.expire_date
+        } else if (this.paid_date) {
+          return this.paid_date
+        } else {
+          return new Date().toISOString().substr(0, 10)
+        }
+      },
+      set (value) {
+        this.$emit('passDate', value)
+      }
     }
   },
+  // watch: {
+  //   date () {
+  //     this.$emit('passDate', this.date)
+  //   }
+  // },
   mounted () {
     this.$emit('passDate', this.date)
   }

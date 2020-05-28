@@ -2,76 +2,92 @@
 <v-container>
   <v-row>
     <v-col cols="12" sm="8" class="mx-auto">
-      <v-card class="mb-5">
-        <v-container>
-          <v-card-title>Member details</v-card-title>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="grid-container">
-                <p>Name:</p>
-                <p>{{ member.name }}</p>
-                <p>Membership Type:</p>
-                <p>{{ member.membership_type }}</p>
-                <p>Date Of Birth:</p>
-                <p>{{ member.dob }}</p>
-                <p>Contact:</p>
-                <p>{{ member.contact }}</p>
-                <p>Emergency Contact:</p>
-                <p>{{ member.emergency_contact }}</p>
-                <p>Occupation:</p>
-                <p>{{ member.occupation }}</p>
-                <p>Medical Condition:</p>
-                <p>{{ member.medical_condition }}</p>
-                <p>Registration amount:</p>
-                <p>{{ member.reg_amount }}</p>
-                <p>Registration date:</p>
-                <p>{{ member.reg_date }}</p>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-          <v-card-actions>
-            <edit-user-details-dialog></edit-user-details-dialog>
-            <v-btn color="primary" @click="updatePendingMember" v-if="member.status === 0">Approve</v-btn>
-          </v-card-actions>
-        </v-container>
-      </v-card>
-      <v-card>
-        <v-container>
-          <v-card-title>
-            Monthly payment
-          </v-card-title>
-          <v-card-text>
-            <v-card outlined>
-              <v-container>
-                <v-card-text>
-                  <v-form @submit.prevent="addPayment">
-                    <v-text-field
-                      :counter="4"
-                      v-model="amount"
-                      label="Paid amount"
-                      type="number"
-                    ></v-text-field>
-                    <!-- <v-text-field
-                      :counter="4"
-                      label="Due amount"
-                      type="number"
-                    ></v-text-field> -->
-                    <date-picker @passDate="getMonthlyFeePaymentDate" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
-                    <date-picker @passDate="getExpiryDate" label='Expiry Date'></date-picker>
-
-                    <v-card-actions>
-                      <v-btn color="primary" outlined class="mb-5 mt-5" type="submit">Add payment</v-btn>
-                    </v-card-actions>
-                  </v-form>
-                </v-card-text>
-              </v-container>
-            </v-card>
-          </v-card-text>
-          <v-card-actions>
-            <payment-history-dialog></payment-history-dialog>
-          </v-card-actions>
-        </v-container>
-      </v-card>
+      <div class="progress text-center">
+        <v-progress-circular
+          indeterminate
+          color="amber"
+          v-if="loading"
+          size="70"
+          width="7"
+        ></v-progress-circular>
+      </div>
+      <div class="card-wrapper" v-if="!loading">
+        <v-card class="mb-5">
+          <v-container>
+            <v-card-title>Member details</v-card-title>
+            <v-list-item three-line>
+              <v-list-item-content>
+                <div class="grid-container">
+                  <p>Name:</p>
+                  <p>{{ singleMember.name }}</p>
+                  <p>Membership Type:</p>
+                  <p>{{ singleMember.membership_type }}</p>
+                  <p>Date Of Birth:</p>
+                  <p>{{ singleMember.dob }}</p>
+                  <p>Contact:</p>
+                  <p>{{ singleMember.contact }}</p>
+                  <p>Emergency Contact:</p>
+                  <p>{{ singleMember.emergency_contact }}</p>
+                  <p>Occupation:</p>
+                  <p>{{ singleMember.occupation }}</p>
+                  <p>Medical Condition:</p>
+                  <p>{{ singleMember.medical_condition }}</p>
+                  <p>Registration amount:</p>
+                  <p>{{ singleMember.reg_amount }}</p>
+                  <p>Registration date:</p>
+                  <p>{{ singleMember.reg_date }}</p>
+                </div>
+              </v-list-item-content>
+            </v-list-item>
+            <v-card-actions>
+              <edit-user-details-dialog :singleMember="singleMember"></edit-user-details-dialog>
+              <v-btn color="primary" @click="updatePendingMember" v-if="singleMember.status === 0 && user.role === 'Admin'">Approve</v-btn>
+            </v-card-actions>
+          </v-container>
+        </v-card>
+<!-- Monthly payment -->
+        <v-card>
+          <v-container>
+            <v-card-title>
+              Monthly payment
+            </v-card-title>
+            <v-card-text>
+              <v-card outlined>
+                <v-container>
+                  <v-card-text>
+                    <v-form @submit.prevent="addPayment" ref="form">
+                      <v-text-field
+                        :counter="4"
+                        v-model="amount"
+                        label="Paid amount"
+                        type="number"
+                      ></v-text-field>
+                      <!-- <v-text-field
+                        :counter="4"
+                        label="Due amount"
+                        type="number"
+                      ></v-text-field> -->
+                      <date-picker @passDate="getMonthlyFeePaymentDate" :paid_date="paid_date" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
+                      <date-picker @passDate="getExpiryDate" :expire_date="expire_date" label='Expiry Date'></date-picker>
+                      <v-text-field
+                        v-model="description"
+                        label="Description"
+                      ></v-text-field>
+                      <v-card-actions>
+                        <v-btn color="primary" outlined class="mb-5 mt-5" type="submit">Add payment</v-btn>
+                      </v-card-actions>
+                    </v-form>
+                  </v-card-text>
+                </v-container>
+              <SnackBar :msg="msg"></SnackBar>
+              </v-card>
+            </v-card-text>
+            <v-card-actions>
+              <payment-history-dialog :id="id"></payment-history-dialog>
+            </v-card-actions>
+          </v-container>
+        </v-card>
+      </div>
     </v-col>
   </v-row>
 </v-container>
@@ -81,31 +97,39 @@
 import PaymentHistoryDialog from '@/components/PaymentHistoryDialog.vue'
 import EditUserDetailsDialog from '@/components/EditUserDetailsDialog.vue'
 import DatePicker from '@/components/DatePicker.vue'
+import SnackBar from '@/components/SnackBar.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
     PaymentHistoryDialog,
     EditUserDetailsDialog,
-    DatePicker
+    DatePicker,
+    SnackBar
   },
-  props: ['id', 'status'],
+  props: ['id'],
   data () {
     return {
       paid_date: new Date().toISOString().substr(0, 10),
       expire_date: new Date().toISOString().substr(0, 10),
-      amount: 0
+      amount: 0,
+      status: 0,
+      description: '',
+      msg: 'Payment Added'
     }
   },
   computed: {
-    ...mapState(['members', 'user']),
-    member () {
-      const payload = {
-        id: this.id,
-        status: this.status
-      }
-      return this.$store.getters.loadMember(payload)
+    ...mapState(['user', 'singleMember', 'loading', 'error', 'success']),
+    getServiceFee () {
+      return (this.amount * 0.6).toFixed(2)
+    },
+    getDevelopmentFee () {
+      return (this.amount * 0.4).toFixed(2)
     }
+  },
+  // loading needs to be implemented then the error will not show.
+  created () {
+    this.$store.dispatch('getSingleMember', this.id)
   },
   methods: {
     getMonthlyFeePaymentDate (date) {
@@ -117,17 +141,23 @@ export default {
     updatePendingMember () {
       const payload = {
         status: 1,
-        id: this.member.id
+        id: this.singleMember.id
       }
       this.$store.dispatch('updatePendingMembers', payload)
     },
     addPayment () {
       const payload = {
-        monthlyFeePaidAmount: this.monthlyFeePaidAmount,
-        monthlyFeePaidDate: this.monthlyFeePaidDate,
-        id: this.id
+        amount: this.amount,
+        paid_date: this.paid_date,
+        id: this.id,
+        expire_date: this.expire_date,
+        description: this.description,
+        status: this.status,
+        service_fee: this.getServiceFee,
+        development_fee: this.getDevelopmentFee
       }
       this.$store.dispatch('addPayment', payload)
+      this.$refs.form.reset()
     }
   }
 }

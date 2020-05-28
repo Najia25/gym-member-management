@@ -21,7 +21,7 @@
     :timeout="timeOut"
     top
   >
-    Member added successfully.
+    {{ msg }}
     <v-btn
       dark
       text
@@ -38,6 +38,7 @@
 import { mapState } from 'vuex'
 export default {
   name: 'SnackBar',
+  props: ['msg'],
   computed: {
     ...mapState(['error', 'success']),
     snackbar1 () {

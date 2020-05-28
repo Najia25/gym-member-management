@@ -13,60 +13,70 @@
       </v-list-item>
     </v-list>
 
-    <v-list three-line v-if="!mini">
+    <v-list three-line v-if="!mini && this.userIsAuthenticated">
       <v-list-item class="text-center online">
         <v-list-item-content>
           <v-icon>mdi-account-circle</v-icon>
-          <v-list-item-title class="role">Manager</v-list-item-title>
+          <v-list-item-title class="role">{{ user.role }}</v-list-item-title>
           <v-list-item-subtitle class="mt-2 status">online</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
-
-      <v-list>
-          <v-list-item  to="/" v-if="this.userIsAuthenticated">
+    <div class="wrapper">
+      <div class="progress text-center mt-5">
+        <v-progress-circular
+          indeterminate
+          color="amber"
+          v-if="loading"
+          size="20"
+          width="4"
+        ></v-progress-circular>
+      </div>
+        <v-list v-if="!loading">
+            <v-list-item  to="/" v-if="this.userIsAuthenticated">
+              <v-list-item-icon>
+                <v-icon> mdi-home-outline </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> Home </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+        <v-list-group
+          v-for="item in menuItems"
+          :key="item.title"
+          no-action
+          active-class="active-control"
+        >
+          <template v-slot:activator>
             <v-list-item-icon>
-              <v-icon> mdi-home-outline </v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Home </v-list-item-title>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-      <v-list-group
-        v-for="item in menuItems"
-        :key="item.title"
-        no-action
-        active-class="active-control"
-      >
-        <template v-slot:activator>
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </v-list-item-content>
-        </template>
+          </template>
 
-          <v-list-item
-            v-for="subItem in item.items"
-            :key="subItem.title"
-            :to="subItem.link"
-          >
+            <v-list-item
+              v-for="subItem in item.items"
+              :key="subItem.title"
+              :to="subItem.link"
+            >
 
-            <v-list-item-content>
-              <v-list-item-title v-text="subItem.title"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-      </v-list-group>
-          <v-list-item @click="onLogout" v-if="this.userIsAuthenticated">
-            <v-list-item-icon>
-              <v-icon> mdi-logout-variant </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Logout </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-      </v-list>
+              <v-list-item-content>
+                <v-list-item-title v-text="subItem.title"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+        </v-list-group>
+            <v-list-item @click="onLogout" v-if="this.userIsAuthenticated">
+              <v-list-item-icon>
+                <v-icon> mdi-logout-variant </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> Logout </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+        </v-list>
+    </div>
     </v-navigation-drawer>
 
     <v-app-bar app>
@@ -86,44 +96,62 @@
 import { mapState } from 'vuex'
 export default {
   name: 'App',
-  components: {
-  },
-
   data: () => ({
     sideNav: true,
     mini: false
   }),
   computed: {
-    ...mapState(['user', 'adminExists']),
+    ...mapState(['user', 'loading']),
     menuItems () {
       let menuItems
       if (this.userIsAuthenticated) {
-        menuItems = [
-          {
-            icon: 'mdi-account-multiple-outline',
-            title: 'Members',
-            items: [
-              { title: 'Approved Members', link: '/members/active-members' },
-              { title: 'Pending Members', link: '/members/pending-members' },
-              { title: 'Add Members', link: '/members/add-member' }
-            ]
-          },
-          {
-            icon: 'mdi-currency-usd',
-            title: 'Payments',
-            items: [
-              { title: 'Pending Payments' }
-            ]
-          },
-          {
-            icon: 'mdi-account-outline',
-            title: 'Staff',
-            items: [
-              { title: 'Staff List', link: '/staff/staff-list' },
-              { title: 'Add Staff', link: '/staff/add-staff' }
-            ]
-          }
-        ]
+        if (this.user.role === 'Admin') {
+          menuItems = [
+            {
+              icon: 'mdi-account-multiple-outline',
+              title: 'Members',
+              items: [
+                { title: 'Approved Members', link: '/members/active-members' },
+                { title: 'Pending Members', link: '/members/pending-members' },
+                { title: 'Add Members', link: '/members/add-member' }
+              ]
+            },
+            {
+              icon: 'mdi-currency-usd',
+              title: 'Payments',
+              items: [
+                { title: 'Pending Payments', link: '/payments/pending-payments' }
+              ]
+            },
+            {
+              icon: 'mdi-account-outline',
+              title: 'Staff',
+              items: [
+                { title: 'Staff List', link: '/staff/staff-list' },
+                { title: 'Add Staff', link: '/staff/add-staff' }
+              ]
+            }
+          ]
+        } else {
+          menuItems = [
+            {
+              icon: 'mdi-account-multiple-outline',
+              title: 'Members',
+              items: [
+                { title: 'Approved Members', link: '/members/active-members' },
+                { title: 'Pending Members', link: '/members/pending-members' },
+                { title: 'Add Members', link: '/members/add-member' }
+              ]
+            },
+            {
+              icon: 'mdi-currency-usd',
+              title: 'Payments',
+              items: [
+                { title: 'Pending Payments', link: '/payments/pending-payments' }
+              ]
+            }
+          ]
+        }
       } else {
         if (this.adminExists) {
           menuItems = [
@@ -132,7 +160,7 @@ export default {
         } else {
           menuItems = [
             { icon: 'mdi-account', title: 'Signin', link: '/signin' },
-            { icon: 'mdi-account', title: 'Signup', link: '/signup' }
+            { icon: 'mdi-account', title: 'Signup', link: '/staff/add-staff' }
           ]
         }
       }

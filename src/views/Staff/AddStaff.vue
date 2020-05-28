@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col col="12" sm="6" class="mx-auto">
-        <signup-form :staffTypes="staffTypes" @onSignUp="addStaff">Add staff</signup-form>
+        <signup-form :msg="msg" :staffTypes="staffTypes" @onSignUp="addStaff">
+          Add staff
+          </signup-form>
       </v-col>
     </v-row>
   </v-container>
@@ -16,7 +18,8 @@ export default {
   },
   data () {
     return {
-      staffTypes: ['Manager', 'Admin']
+      staffTypes: ['Manager', 'Admin'],
+      msg: 'Staff added'
     }
   },
   methods: {

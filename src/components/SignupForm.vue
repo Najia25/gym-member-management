@@ -4,7 +4,7 @@
       {{ error.message }}
     </v-alert>
     <v-alert type="success" dismissible @input="onDismissed" text v-if="success">
-      Staff Added successfully.
+      {{ msg }}
     </v-alert>
     <v-card-title>
       <slot>Sign Up</slot>
@@ -15,14 +15,12 @@
         @submit.prevent = "onSignUp"
         >
           <v-select
-            v-if="!isAdminSignup"
             label="Staff type"
             :items="staffTypes"
             v-model="staffType"
             outlined
           ></v-select>
           <v-text-field class="mb-5"
-            v-if="!isAdminSignup"
             v-model="name"
             label="Name"
             name="name"
@@ -66,7 +64,7 @@
 import { mapState } from 'vuex'
 export default {
   name: 'signup-form',
-  props: ['isAdminSignup', 'staffTypes'],
+  props: ['staffTypes', 'msg', 'isAdminSignup'],
   data () {
     return {
       show1: true,
@@ -93,12 +91,6 @@ export default {
     passwordMatch () {
       return this.password !== this.confirmPassword ? "Passwords don't match" : true
     }
-    // error () {
-    //   return this.$store.getters.error
-    // },
-    // loading () {
-    //   return this.$store.getters.loading
-    // }
   },
   methods: {
     onSignUp () {
@@ -117,6 +109,7 @@ export default {
         }
       }
       this.$emit('onSignUp', payload)
+      this.$refs.form.reset()
     },
     onDismissed () {
       if (this.error) {

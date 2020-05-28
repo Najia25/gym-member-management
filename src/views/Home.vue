@@ -2,15 +2,33 @@
   <v-container>
     <v-row>
       <v-col>
-
-<!-- Pending New Payments -->
         <v-card class="mb-5">
           <v-container>
             <v-card-title>
-              Pending Payments
+              Home
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
             </v-card-title>
-            <v-data-table>
-
+            <v-data-table :headers="headers" :items="home" :search="search" hide-default-footer disable-pagination>
+              <template v-slot:item="{ item }">
+                <tr class="text-center" v-bind:class="{'green accent-1': isGreen(item.remaining_days), 'lime accent-1': isYellow(item.remaining_days), 'red accent-1': isRed(item.remaining_days) }">
+                  <td>{{ item.id }}</td>
+                  <td>
+                    <router-link :to="{ name: 'member', params: { id: item.id }}">{{ item.name }}</router-link>
+                  </td>
+                  <td>{{ item.contact }}</td>
+                  <td>{{ item.amount }}</td>
+                  <td>{{ item.paid_date }}</td>
+                  <td>{{ item.expire_date }}</td>
+                  <td>{{ item.remaining_days }}</td>
+                </tr>
+              </template>
             </v-data-table>
           </v-container>
         </v-card>
@@ -21,48 +39,55 @@
 
 <script>
 
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
       search: '',
       headers: [
-        { text: 'Member Id', align: 'start', sortable: false, value: 'memberCount' },
-        { text: 'Name', sortable: false, value: 'name' },
-        { text: 'Contact', sortable: false, value: 'contact' },
-        { text: 'Status', sortable: false, value: 'status' }
+        { text: 'Id', align: 'center', sortable: false, value: 'id' },
+        { text: 'Name', align: 'center', sortable: false, value: 'name' },
+        { text: 'Contact', align: 'center', sortable: false, value: 'contact' },
+        { text: 'Amount', align: 'center', sortable: false, value: 'amount' },
+        { text: 'Paid Date', align: 'center', sortable: false, value: 'paid_date' },
+        { text: 'Expire Date', align: 'center', sortable: false, value: 'expire_date' },
+        { text: 'Remaining Days', align: 'center', sortable: false, value: 'remaining_days' }
       ]
     }
   },
   computed: {
-    ...mapState(['user']),
-    ...mapGetters(['loadPendingMembers', 'loadActiveMembers']),
-    pendingMembersHeaders () {
-      const headers = [
-        { text: 'Name', sortable: false, value: 'name' },
-        { text: 'Contact', sortable: false, value: 'contact' },
-        { text: 'Membership Fee', sortable: false, value: 'membershipFeeAmount' },
-        { text: 'Registration Date', sortable: false, value: 'membershipFeeDate' },
-        { text: 'Status', sortable: false, value: 'status' },
-        { text: 'Action', sortable: false, value: 'action' }
-      ]
-      // console.log(this.user.role)
-      if (this.user.role === 'Admin') {
-        return headers
-      } else {
-        headers.pop()
-        return headers
-      }
-    }
+    ...mapState(['home'])
+  },
+  created () {
+    this.$store.dispatch('getHomeItems')
   },
   methods: {
-    updateStatus (item) {
-      const payload = {
-        status: 'Active',
-        id: item.id
+    isGreen (remainingDays) {
+      if (remainingDays > 7) {
+        return true
+      } else {
+        return false
       }
-      this.$store.dispatch('updateMemberData', payload)
+    },
+    isYellow (remainingDays) {
+      if (remainingDays <= 7 && remainingDays > 0) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isRed (remainingDays) {
+      if (remainingDays < 1) {
+        return true
+      } else {
+        return false
+      }
     }
+    // getColor (remainingDays) {
+    //   if (remainingDays <= 7 && remainingDays > 0) return 'yellow'
+    //   else if (remainingDays < 1) return 'red'
+    //   else return 'green'
+    // }
   }
 }
 </script>

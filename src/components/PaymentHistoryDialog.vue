@@ -9,6 +9,7 @@
         outlined
         class="mb-5 mt-5 ml-5"
         v-on="on"
+        @click="onBtnClick"
       >
       Payment history
       </v-btn>
@@ -17,28 +18,19 @@
       <v-container>
         <v-card-title>
           Transaction History
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="transactions"
-          :search="search"
+          :items="allPayments"
+          disable-pagination
+          hide-default-footer
         >
-          <template v-slot:item.action="{ item }">
-            <v-icon
-              small
-              @click="deleteItem(item)"
-            >
-              mdi-delete
-            </v-icon>
+          <template v-slot:item.status="{ item }">
+            {{ item.status === 0 ? "Pending" : "Approved" }}
           </template>
+          <!-- <template v-slot:item.action="{ item }">
+            <edit-payment-details-dialog :item="item"></edit-payment-details-dialog>
+          </template> -->
         </v-data-table>
         <v-card-actions>
           <v-btn @click="paymentDialog = false" color="primary">close</v-btn>
@@ -49,37 +41,36 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+// import EditPaymentDetailsDialog from '@/components/EditPaymentDetailsDialog.vue'
 export default {
   name: 'payment-history-dialog',
+  props: ['id'],
+  // components: {
+  //   EditPaymentDetailsDialog
+  // },
   data () {
     return {
       paymentDialog: false,
       search: '',
       headers: [
-        {
-          text: 'Transaction Id',
-          align: 'start',
-          sortable: false,
-          value: 'transactionId'
-        },
-        { text: 'Amount', sortable: false, value: 'amount' },
-        { text: 'Month', sortable: false, value: 'month' },
-        { text: 'Date', sortable: false, value: 'date' },
-        { text: 'Actions', sortable: false, value: 'action' }
-      ],
-      transactions: [
-        { transactionId: '1', amount: 'Abrar Zahin', month: 123456, date: 0 },
-        { transactionId: '2', amount: 'Najia Afrin', month: 12345678, date: 0 },
-        { transactionId: '3', amount: 'Maliha Piu', month: 12345678, date: 0 },
-        { transactionId: '4', amount: 'Noushin Sharmili', month: 123456, date: 0 },
-        { transactionId: '5', amount: 'Ahnaf Jaeem', month: 12345678, date: 0 }
+        { text: 'Amount', align: 'start', sortable: false, value: 'amount' },
+        { text: 'Paid Date', sortable: false, value: 'paid_date' },
+        { text: 'Expire Date', sortable: false, value: 'expire_date' },
+        { text: 'Description', sortable: false, value: 'description' },
+        { text: 'Service Fee', sortable: false, value: 'service_fee' },
+        { text: 'Development Fee', sortable: false, value: 'development_fee' },
+        { text: 'Status', sortable: false, value: 'status' }
+        // { text: 'Action', sortable: false, value: 'action' }
       ]
     }
   },
+  computed: {
+    ...mapState(['allPayments'])
+  },
   methods: {
-    deleteItem (item) {
-      const index = this.transactions.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.transactions.splice(index, 1)
+    onBtnClick () {
+      this.$store.dispatch('getAllPayments', this.id)
     }
   }
 }

@@ -4,14 +4,14 @@
       <v-col>
         <!-- Pending New Members -->
         <v-card class="mb-5">
-          <SnackBar></SnackBar>
+          <SnackBar :msg="msg"></SnackBar>
           <v-container>
             <v-card-title>
               Pending New Members
             </v-card-title>
-            <v-data-table :headers="pendingMembersHeaders" :items="pendingMembers" disable-pagination>
+            <v-data-table :headers="pendingMembersHeaders" :items="pendingMembers"  disable-pagination hide-default-footer>
               <template v-slot:item.name="{ item }">
-                <router-link :to="{ name: 'member', params: { id: item.id, status: item.status}}">{{ item.name }}</router-link>
+                <router-link :to="{ name: 'member', params: { id: item.id }}">{{ item.name }}</router-link>
               </template>
               <template v-slot:item.action="{ item }" v-if="user.role === 'Admin'">
                 <v-btn small color="primary" @click="updatePendingMember(item)">Approve</v-btn>
@@ -52,6 +52,11 @@ export default {
         headers.pop()
         return headers
       }
+    }
+  },
+  data () {
+    return {
+      msg: 'member added'
     }
   },
   created () {

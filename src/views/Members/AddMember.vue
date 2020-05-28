@@ -32,7 +32,7 @@
                     label="Emergency Contact"
                     :rules="[rules.required]"
                   ></v-text-field>
-                  <date-picker @passDate="getDate" label='Date Of Birth'></date-picker>
+                  <date-picker @passDate="getDate" :dateOfBirth="dateOfBirth" label='Date Of Birth'></date-picker>
                   <v-text-field
                     type="text"
                     v-model="occupation"
@@ -59,7 +59,7 @@
                             label="Due amount"
                             type="number"
                           ></v-text-field> -->
-                          <date-picker @passDate="getMembershipFeeDate" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
+                          <date-picker @passDate="getMembershipFeeDate" :membershipFeeDate="membershipFeeDate" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
                       </v-card-text>
                     </v-container>
                   </v-card>
@@ -121,15 +121,6 @@ export default {
   },
   methods: {
     addMember () {
-      // if (!this.formIsValid) {
-      // return
-      // }
-      // if (this.user.role === 'Manager') {
-      //   this.status = 'Pending'
-      // }
-      // if (this.user.role === 'Admin') {
-      //   this.status = 'Active'
-      // }
       const payload = {
         name: this.name,
         contact: this.contact,
@@ -144,6 +135,8 @@ export default {
       }
       console.log(payload)
       this.$store.dispatch('addMember', payload)
+
+      this.$refs.form.reset()
     },
     getDate (date) {
       this.dateOfBirth = date
@@ -152,9 +145,5 @@ export default {
       this.membershipFeeDate = membershipFeeDate
     }
   }
-  // computed: {
-  //   isAdmin () {
-  //   }
-  // }
 }
 </script>

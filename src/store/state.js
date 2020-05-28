@@ -1,4 +1,5 @@
 export default {
+  home: [],
   user: null,
   adminExists: false,
   error: null,
@@ -6,5 +7,9 @@ export default {
   success: false,
   approvedMembers: [],
   pendingMembers: [],
-  staffs: []
+  allPayments: [],
+  pendingPayments: [],
+  singleMember: null,
+  staffs: [],
+  singleStaff: null
 }

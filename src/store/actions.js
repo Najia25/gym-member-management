@@ -5,12 +5,31 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 
 export default {
-
+  getHomeItems ({ commit }) {
+    axios.get('/homepage')
+      .then(response => {
+        console.log(response.data)
+        commit('setHomePageItems', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   getPendingMembers ({ commit }) {
     axios.get('/inactiveMembers')
       .then(response => {
         console.log(response.data.data)
         commit('setPendingMembers', response.data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  getPendingPayments ({ commit }) {
+    axios.get('/pendingPayments')
+      .then(response => {
+        console.log(response.data)
+        commit('setpendingPayments', response.data)
       })
       .catch(error => {
         console.log(error)
@@ -24,6 +43,29 @@ export default {
         commit('setApprovedMembers', response.data.data)
       })
       .catch(error => {
+        console.log(error)
+      })
+  },
+  getAllPayments ({ commit }, payload) {
+    axios.get(`/members/${payload}/payments`)
+      .then(response => {
+        console.log(response)
+        commit('setAllPayments', response.data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  getSingleMember ({ commit }, payload) {
+    commit('setLoading', true)
+    axios.get(`/members/${payload}`)
+      .then(response => {
+        commit('setLoading', false)
+        console.log(response.data.data)
+        commit('setSingleMember', response.data.data)
+      })
+      .catch(error => {
+        commit('setLoading', false)
         console.log(error)
       })
   },
@@ -43,6 +85,53 @@ export default {
         commit('setError', error)
         console.log(error)
         // commit('setLoading', false)
+      })
+  },
+  updatePendingPayments ({ commit }, payload) {
+    commit('clearError')
+    commit('setSuccess', false)
+    const status = {
+      status: payload.status
+    }
+    axios.patch(`/members/${payload.member_id}/payments/${payload.id}`, status)
+      .then(() => {
+        // commit('addApprovedMember', payload)
+        commit('setSuccess', true)
+        commit('updatePendingPayments', payload.id)
+      })
+      .catch(error => {
+        commit('setError', error)
+        console.log(error)
+        // commit('setLoading', false)
+      })
+  },
+  updateSinglePaymentData ({ commit }, payload) {
+    const updateObj = {}
+    console.log(payload)
+    if (payload.amount) {
+      updateObj.amount = payload.amount
+    }
+    if (payload.paid_date) {
+      updateObj.paid_date = payload.paid_date
+    }
+    if (payload.expire_date) {
+      updateObj.expire_date = payload.expire_date
+    }
+    if (payload.description) {
+      updateObj.description = payload.description
+    }
+    if (payload.service_fee) {
+      updateObj.service_fee = payload.service_fee
+    }
+    if (payload.development_fee) {
+      updateObj.development_fee = payload.development_fee
+    }
+    axios.patch(`/members/${payload.member_id}/payments/${payload.id}`, updateObj)
+      .then(() => {
+        commit('updateSinglePaymentData', payload)
+      })
+      .catch(error => {
+        console.log(error)
       })
   },
   addMember ({ commit }, payload) {
@@ -73,14 +162,20 @@ export default {
       })
   },
 
-  updateMemberData ({ commit }, payload) {
+  updateSingleMemberData ({ commit }, payload) {
     const updateObj = {}
     console.log(payload)
+    if (payload.membership_type) {
+      updateObj.membership_type = payload.membership_type
+    }
     if (payload.name) {
       updateObj.name = payload.name
     }
     if (payload.contact) {
       updateObj.contact = payload.contact
+    }
+    if (payload.emergency_contact) {
+      updateObj.emergency_contact = payload.emergency_contact
     }
     if (payload.dob) {
       updateObj.dob = payload.dob
@@ -88,11 +183,8 @@ export default {
     if (payload.occupation) {
       updateObj.occupation = payload.occupation
     }
-    if (payload.emergency_contact) {
-      updateObj.emergency_contact = payload.emergency_contact
-    }
-    if (payload.membership_type) {
-      updateObj.membership_type = payload.membership_type
+    if (payload.medical_condition) {
+      updateObj.medical_condition = payload.medical_condition
     }
     if (payload.reg_amount) {
       updateObj.reg_amount = payload.reg_amount
@@ -100,16 +192,11 @@ export default {
     if (payload.reg_date) {
       updateObj.reg_date = payload.reg_date
     }
-    if (payload.status) {
-      updateObj.status = payload.status
-    }
-    if (payload.medical_condition) {
-      updateObj.medical_condition = payload.medical_condition
-    }
+
     console.log(updateObj)
     axios.patch('/members/' + payload.id, updateObj)
       .then(() => {
-        commit('updateMemberData', payload)
+        commit('updateSingleMemberData', payload)
       })
       .catch(error => {
         console.log(error)
@@ -117,14 +204,18 @@ export default {
       })
   },
   adminExists ({ commit }) {
-    const ref = firebase.database().ref('users').child('Admin')
-    ref.once('value')
-      .then(function (snapshot) {
-        if (snapshot.exists()) {
+    commit('setLoading', true)
+    axios.get('/admincheck')
+      .then(response => {
+        commit('setLoading', false)
+        if (response.data === 1) {
           commit('adminExists', true)
+        } else {
+          commit('adminExists', false)
         }
       })
       .catch(error => {
+        commit('setLoading', false)
         console.log(error)
       })
   },
@@ -174,60 +265,22 @@ export default {
       })
   },
 
-  assignUserRoles ({ commit }, payload) {
-    console.log(payload)
-    const id = payload.id
-    const role = payload.role
-    // let data
-    // let roleId
-    // const ref = firebase.database().ref('roles')
-    // ref.orderByValue().equalTo(role).on('value', function (dataSnapshot) {
-    //   data = dataSnapshot.val()
-    //   roleId = Object.keys(data)[0]
-    firebase.database().ref('/users/' + role + '/').push(id)
-      .then(() => {
-        commit('addUser', { id: id, role: role })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    // })
-  },
-
-  signInUser ({ dispatch }, payload) {
-    console.log('chiao')
-    firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-      .then(data => {
-        // let role
-        console.log(data.user.uid)
-        dispatch('fetchUserRole', data.user.uid)
+  signInUser ({ commit }, payload) {
+    commit('clearError')
+    axios.get(`/signin?user=${payload.email}&pass=${payload.password}`)
+      .then(response => {
+        // commit('setLoading', false)
+        console.log(response.data[0])
+        const newUser = {
+          role: response.data[0].type
+        }
+        commit('addUser', newUser)
       })
       .catch(error => {
-        console.log('chiao')
+        commit('setError', true)
         console.log(error)
       })
   },
-
-  fetchUserRole ({ commit }, payload) {
-    let role
-    var ref = firebase.database().ref('users').child('Admin')
-    ref.orderByValue().equalTo(payload).on('value', function (dataSnapshot) {
-      if (dataSnapshot.val() !== null) {
-        role = 'Admin'
-      } else {
-        role = 'Manager'
-      }
-      const newUser = {
-        id: payload,
-        role: role
-      }
-      commit('addUser', newUser)
-    })
-  },
-
-  // autoSignIn ({ dispatch }, payload) {
-  //   dispatch('fetchUserRole', payload.user.uid)
-  // },
 
   logOut ({ commit }) {
     commit('addUser', null)
@@ -304,6 +357,29 @@ export default {
 
   // PAYMENT
   addPayment ({ commit }, payload) {
+    commit('clearError')
+    commit('setSuccess', false)
+    const payment = {
+      member_id: payload.id,
+      amount: payload.amount,
+      paid_date: payload.paid_date,
+      expire_date: payload.expire_date,
+      description: payload.description,
+      service_fee: payload.service_fee,
+      development_fee: payload.development_fee,
+      status: payload.status
+    }
+    // let userId
+    console.log(payment)
+    axios.post(`/members/${payload.id}/payments`, payment)
+      .then(response => {
+        commit('setSuccess', true)
+        console.log(response)
+      })
+      .catch(error => {
+        commit('setError', error)
+        console.log(error)
+      })
   },
   clearError ({ commit }) {
     commit('clearError')

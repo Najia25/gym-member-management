@@ -6,12 +6,9 @@
         <v-card class="mb-5">
           <v-container>
             <v-card-title>
-              List Of Staffs
+              List of staffs
             </v-card-title>
-            <v-data-table :headers="staffListHeaders" :items="staffs" disable-pagination>
-              <template v-slot:item.name="{ item }">
-                <router-link :to="`/staffs/${ item.id }`">{{ item.name }}</router-link>
-              </template>
+            <v-data-table :headers="staffListHeaders" :items="staffs"  hide-default-footer disable-pagination>
             </v-data-table>
           </v-container>
         </v-card>

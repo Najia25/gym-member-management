@@ -10,9 +10,9 @@
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
               </v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="approvedMembers" :search="search" disable-pagination>
+            <v-data-table :headers="headers" :items="approvedMembers" :search="search"  disable-pagination hide-default-footer>
               <template v-slot:item.name="slotProps">
-                <router-link :to="{ name: 'member', params: { id: slotProps.item.id, status: slotProps.item.status}}">{{ slotProps.item.name }}</router-link>
+                <router-link :to="{ name: 'member', params: { id: slotProps.item.id }}">{{ slotProps.item.name }}</router-link>
               </template>
             </v-data-table>
           </v-container>
