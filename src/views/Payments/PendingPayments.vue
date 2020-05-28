@@ -47,7 +47,7 @@ export default {
         { text: 'Expire Date', align: 'center', sortable: false, value: 'expire_date' },
         { text: 'Action', sortable: false, value: 'action' }
       ],
-      msg: 'Payment added'
+      msg: 'Payment approved'
     }
   },
   created () {

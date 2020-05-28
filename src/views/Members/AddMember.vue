@@ -19,14 +19,14 @@
                     :rules="[rules.required]"
                   ></v-text-field>
                   <v-text-field
-                  type="number"
+                    type="number"
                     v-model="contact"
                     :counter="11"
                     label="Contact"
                     :rules="[rules.required]"
                   ></v-text-field>
                   <v-text-field
-                  type="number"
+                    type="number"
                     v-model="emgContact"
                     :counter="11"
                     label="Emergency Contact"
@@ -75,7 +75,7 @@
           <v-alert type="success" dismissible text v-if="success">
             bla bla shit
           </v-alert> -->
-        <SnackBar></SnackBar>
+        <SnackBar :msg="msg"></SnackBar>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -116,7 +116,8 @@ export default {
       rules: {
         required: value => !!value || 'Required.'
       },
-      timeOut: 0
+      timeOut: 0,
+      msg: 'Member added'
     }
   },
   methods: {

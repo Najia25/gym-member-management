@@ -50,6 +50,7 @@ Example:
 13.02.2020>monthly fee>500>12.03.2020
 13.01.2020>monthly fee>500>12.02.
 
-.v-input .v-input__control .v-input__slot .v-text-field__slot input[type=number]#input-85 {
-    display: none;
-}
+1.toast msg change x
+2.datepicker disable days
+3.add signup page.
+4.date of birth nullable in database and form.

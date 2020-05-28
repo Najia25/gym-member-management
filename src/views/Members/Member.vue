@@ -115,7 +115,7 @@ export default {
       amount: 0,
       status: 0,
       description: '',
-      msg: 'Payment Added'
+      msg: ''
     }
   },
   computed: {
@@ -139,6 +139,7 @@ export default {
       this.expire_date = date
     },
     updatePendingMember () {
+      this.msg = 'Member approved'
       const payload = {
         status: 1,
         id: this.singleMember.id
@@ -146,6 +147,7 @@ export default {
       this.$store.dispatch('updatePendingMembers', payload)
     },
     addPayment () {
+      this.msg = 'Payment added'
       const payload = {
         amount: this.amount,
         paid_date: this.paid_date,

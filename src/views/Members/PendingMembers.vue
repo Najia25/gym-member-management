@@ -56,7 +56,7 @@ export default {
   },
   data () {
     return {
-      msg: 'member added'
+      msg: 'Member approved'
     }
   },
   created () {

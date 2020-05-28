@@ -48,7 +48,7 @@ export default {
         { text: 'Id', align: 'center', sortable: false, value: 'id' },
         { text: 'Name', align: 'center', sortable: false, value: 'name' },
         { text: 'Contact', align: 'center', sortable: false, value: 'contact' },
-        { text: 'Amount', align: 'center', sortable: false, value: 'amount' },
+        { text: 'Amount (Paid)', align: 'center', sortable: false, value: 'amount' },
         { text: 'Paid Date', align: 'center', sortable: false, value: 'paid_date' },
         { text: 'Expire Date', align: 'center', sortable: false, value: 'expire_date' },
         { text: 'Remaining Days', align: 'center', sortable: false, value: 'remaining_days' }

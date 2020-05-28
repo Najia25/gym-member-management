@@ -45,7 +45,7 @@ export default {
         } else if (this.paid_date) {
           return this.paid_date
         } else {
-          return new Date().toISOString().substr(0, 10)
+          return null
         }
       },
       set (value) {
