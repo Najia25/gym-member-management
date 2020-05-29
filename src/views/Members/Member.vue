@@ -68,7 +68,7 @@
                         type="number"
                       ></v-text-field> -->
                       <date-picker @passDate="getMonthlyFeePaymentDate" :paid_date="paid_date" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
-                      <date-picker @passDate="getExpiryDate" :expire_date="expire_date" label='Expiry Date'></date-picker>
+                      <date-picker @passDate="getExpiryDate" :allowedDates="allowedDates" :expire_date="expire_date" label='Expiry Date'></date-picker>
                       <v-text-field
                         v-model="description"
                         label="Description"
@@ -125,9 +125,17 @@ export default {
     },
     getDevelopmentFee () {
       return (this.amount * 0.4).toFixed(2)
+    },
+    allowedDates () {
+      if (this.paid_date) {
+        const date = new Date(this.paid_date)
+        date.setUTCDate(date.getUTCDate() + 1)
+        return date.toISOString().slice(0, 10)
+      } else {
+        return undefined
+      }
     }
   },
-  // loading needs to be implemented then the error will not show.
   created () {
     this.$store.dispatch('getSingleMember', this.id)
   },
@@ -168,7 +176,7 @@ export default {
 <style scoped>
 .grid-container {
 display: grid;
-grid-template-columns: 146px auto;
+grid-template-columns: auto auto;
 grid-column-gap: 20px;
 }
 .v-application p:nth-child(odd) {
@@ -176,13 +184,5 @@ font-weight: 500;
 }
 .status {
 color:rgba(29, 211, 29, 0.911);
-}
-/* Chrome, Safari, Edge, Opera */
-/* .v-input .v-input__control .v-input__slot .v-text-field__slot input[type=number]#input-85::-webkit-outer-spin-button, .v-input .v-input__control .v-input__slot .v-text-field__slot input[type=number]#input-85::-webkit-inner-spin-button {
--webkit-appearance: none;
-margin: 0;
-} */
-input#input-85 {
--moz-appearance: textfield;
 }
 </style>

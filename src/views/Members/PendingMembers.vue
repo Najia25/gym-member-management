@@ -4,7 +4,7 @@
       <v-col>
         <!-- Pending New Members -->
         <v-card class="mb-5">
-          <SnackBar :msg="msg"></SnackBar>
+          <SnackBar :msg="msg" :timeOut="timeOut"></SnackBar>
           <v-container>
             <v-card-title>
               Pending New Members
@@ -56,7 +56,8 @@ export default {
   },
   data () {
     return {
-      msg: 'Member approved'
+      msg: 'Member approved',
+      timeOut: 3000
     }
   },
   created () {

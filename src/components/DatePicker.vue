@@ -19,7 +19,7 @@
         v-on="on"
         ></v-text-field>
       </template>
-      <v-date-picker v-model="date" no-title @input="menu = false"></v-date-picker>
+      <v-date-picker v-model="date" :min="allowedDates ? allowedDates : undefined" no-title @input="menu = false"></v-date-picker>
     </v-menu>
 </template>
 
@@ -27,7 +27,7 @@
 
 export default {
   name: 'date-picker',
-  props: ['label', 'membershipFeeDate', 'dateOfBirth', 'expire_date', 'paid_date'],
+  props: ['label', 'membershipFeeDate', 'dateOfBirth', 'expire_date', 'paid_date', 'allowedDates'],
   data () {
     return {
       menu: false

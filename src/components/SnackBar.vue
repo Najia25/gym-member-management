@@ -3,7 +3,7 @@
   <v-snackbar
     v-model="snackbar1"
     color="error"
-    :timeout="timeOut"
+    :timeout="timeout"
     top
   >
     {{ error ? error.message : '' }}
@@ -18,7 +18,7 @@
   <v-snackbar
     v-model="snackbar2"
     color="success"
-    :timeout="timeOut"
+    :timeout="timeout"
     top
   >
     {{ msg }}
@@ -41,25 +41,40 @@ export default {
   props: ['msg'],
   computed: {
     ...mapState(['error', 'success']),
-    snackbar1 () {
-      if (this.error) {
-        return true
-      } else {
-        return false
+    // need getter setter
+    snackbar1: {
+      get () {
+        if (this.error !== null) {
+          return true
+        } else {
+          return false
+        }
+      },
+      set (value) {
+        value = false
       }
     },
-    snackbar2 () {
-      if (this.success) {
-        return true
-      } else {
-        return false
+    snackbar2: {
+      get () {
+        if (this.success === true) {
+          return true
+        } else {
+          return false
+        }
+      },
+      set (value) {
+        value = false
       }
     }
   },
   data () {
     return {
-      timeOut: 0
+      timeout: 3500
     }
+  },
+  created () {
+    this.$store.dispatch('clearError')
+    this.$store.dispatch('clearSuccess')
   },
   methods: {
     onDismissed () {
