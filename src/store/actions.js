@@ -1,4 +1,3 @@
-import * as firebase from 'firebase'
 import router from '../router'
 import axios from 'axios'
 
@@ -35,12 +34,31 @@ export default {
         console.log(error)
       })
   },
+  getReferenceReport ({ commit }, payload) {
+    axios.get(`/referencereport?from=${payload.fromDate}&to=${payload.toDate}`)
+      .then(response => {
+        commit('setReferenceReport', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   // ADMIN
   getApprovedMembers ({ commit }) {
     axios.get('/activeMembers')
       .then(response => {
         console.log(response.status)
         commit('setApprovedMembers', response.data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  getAllMembers ({ commit }) {
+    axios.get('/members')
+      .then(response => {
+        console.log(response.status)
+        commit('setAllMembers', response.data.data)
       })
       .catch(error => {
         console.log(error)
@@ -61,35 +79,81 @@ export default {
     axios.get(`/members/${payload}`)
       .then(response => {
         commit('setLoading', false)
-        console.log(response.data.data)
-        commit('setSingleMember', response.data.data)
+        console.log(response.data.data[0])
+        commit('setSingleMember', response.data.data[0])
       })
       .catch(error => {
         commit('setLoading', false)
         console.log(error)
       })
   },
-  updatePendingMembers ({ commit }, payload) {
-    commit('clearError')
-    commit('setSuccess', false)
-    const status = {
-      status: payload.status
+  // updatePendingMembers ({ commit }, payload) {
+  //   const status = {
+  //     status: payload.status
+  //   }
+  //   axios.patch('/members/' + payload.id, status)
+  //     .then(() => {
+  //       // commit('addApprovedMember', payload)
+  //       commit('setSuccess', true)
+  //       commit('updatePendingMembers', payload.id)
+  //     })
+  //     .catch(error => {
+  //       commit('setError', error)
+  //       console.log(error)
+  //       // commit('setLoading', false)
+  //     })
+  // },
+  updateSingleMemberData ({ commit }, payload) {
+    const updateObj = {}
+    console.log(payload)
+    if (payload.membership_type) {
+      updateObj.membership_type = payload.membership_type
     }
-    axios.patch('/members/' + payload.id, status)
+    if (payload.status) {
+      updateObj.status = payload.status
+    }
+    if (payload.name) {
+      updateObj.name = payload.name
+    }
+    if (payload.contact) {
+      updateObj.contact = payload.contact
+    }
+    if (payload.emergency_contact) {
+      updateObj.emergency_contact = payload.emergency_contact
+    }
+    if (payload.dob) {
+      updateObj.dob = payload.dob
+    }
+    if (payload.occupation) {
+      updateObj.occupation = payload.occupation
+    }
+    if (payload.medical_condition) {
+      updateObj.medical_condition = payload.medical_condition
+    }
+    if (payload.reg_amount) {
+      updateObj.reg_amount = payload.reg_amount
+    }
+    if (payload.reg_date) {
+      updateObj.reg_date = payload.reg_date
+    }
+
+    console.log(updateObj)
+    axios.patch('/members/' + payload.id, updateObj)
       .then(() => {
-        // commit('addApprovedMember', payload)
+        commit('updatePendingMembers', payload)
         commit('setSuccess', true)
-        commit('updatePendingMembers', payload.id)
+        if (payload.singleMember) {
+          commit('updateSingleMemberData', payload)
+          commit('setSuccess', true)
+        }
       })
       .catch(error => {
-        commit('setError', error)
         console.log(error)
+        commit('setError', error)
         // commit('setLoading', false)
       })
   },
   updatePendingPayments ({ commit }, payload) {
-    commit('clearError')
-    commit('setSuccess', false)
     const status = {
       status: payload.status
     }
@@ -134,9 +198,39 @@ export default {
         console.log(error)
       })
   },
+  deleteStaff ({ commit }, payload) {
+    const status = {
+      status: -1
+    }
+    axios.patch(`/staffs/${payload.id}`, status)
+      .then(() => {
+        commit('deleteStaff', payload.id)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  updateSingleStaff ({ commit }, payload) {
+    const updateObj = {}
+    console.log(payload)
+    if (payload.email) {
+      updateObj.email = payload.email
+    }
+    if (payload.password) {
+      updateObj.password = payload.password
+    }
+    if (payload.type) {
+      updateObj.type = payload.type
+    }
+    axios.patch(`/staffs/${payload.id}`, updateObj)
+      .then(() => {
+        commit('updateSingleStaff', payload)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   addMember ({ commit }, payload) {
-    commit('clearError')
-    commit('setSuccess', false)
     const member = {
       membership_type: payload.membershipType,
       name: payload.name,
@@ -147,6 +241,7 @@ export default {
       medical_condition: payload.mdclCondition,
       reg_amount: payload.membershipFeeAmount,
       reg_date: payload.membershipFeeDate,
+      staff_id: payload.staff_id,
       status: payload.status
     }
     // let userId
@@ -162,67 +257,22 @@ export default {
       })
   },
 
-  updateSingleMemberData ({ commit }, payload) {
-    const updateObj = {}
-    console.log(payload)
-    if (payload.membership_type) {
-      updateObj.membership_type = payload.membership_type
-    }
-    if (payload.name) {
-      updateObj.name = payload.name
-    }
-    if (payload.contact) {
-      updateObj.contact = payload.contact
-    }
-    if (payload.emergency_contact) {
-      updateObj.emergency_contact = payload.emergency_contact
-    }
-    if (payload.dob) {
-      updateObj.dob = payload.dob
-    }
-    if (payload.occupation) {
-      updateObj.occupation = payload.occupation
-    }
-    if (payload.medical_condition) {
-      updateObj.medical_condition = payload.medical_condition
-    }
-    if (payload.reg_amount) {
-      updateObj.reg_amount = payload.reg_amount
-    }
-    if (payload.reg_date) {
-      updateObj.reg_date = payload.reg_date
-    }
-
-    console.log(updateObj)
-    axios.patch('/members/' + payload.id, updateObj)
-      .then(() => {
-        commit('updateSingleMemberData', payload)
-      })
-      .catch(error => {
-        console.log(error)
-        // commit('setLoading', false)
-      })
-  },
   adminExists ({ commit }) {
-    commit('setLoading', true)
     axios.get('/admincheck')
       .then(response => {
-        commit('setLoading', false)
-        if (response.data === 1) {
-          commit('adminExists', true)
-        } else {
-          commit('adminExists', false)
-        }
+        console.log(response.data)
+        commit('adminExist', response.data)
       })
       .catch(error => {
-        commit('setLoading', false)
         console.log(error)
       })
   },
   addStaff ({ commit }, payload) {
-    commit('setSuccess', false)
-    commit('clearError')
-    axios.post('/staffs', payload)
+    const load = {
+      ...payload,
+      status: 1
+    }
+    axios.post('/staffs', load)
       .then(response => {
         commit('setSuccess', true)
         console.log(response)
@@ -242,29 +292,6 @@ export default {
         console.log(error)
       })
   },
-  signUpUser ({ commit, dispatch }, payload) {
-    // commit('setLoading', true)
-    // commit('clearError')
-    firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-      .then(
-        data => {
-          // commit('setLoading', false)
-          const newUser = {
-            id: data.user.uid,
-            role: payload.role
-          }
-          console.log(newUser.id)
-          commit('addUser', newUser)
-          dispatch('assignUserRoles', newUser)
-        }
-      )
-      .catch(error => {
-        // commit('setLoading', false)
-        // commit('setError', error)
-        console.log(error)
-      })
-  },
-
   signInUser ({ commit }, payload) {
     commit('clearError')
     axios.get(`/signin?user=${payload.email}&pass=${payload.password}`)
@@ -272,6 +299,7 @@ export default {
         // commit('setLoading', false)
         console.log(response.data[0])
         const newUser = {
+          id: response.data[0].id,
           role: response.data[0].type
         }
         commit('addUser', newUser)
@@ -284,37 +312,7 @@ export default {
 
   logOut ({ commit }) {
     commit('addUser', null)
-    firebase.auth().signOut()
     router.push('/signin')
-  },
-
-  // MEMBER
-  loadMembers ({ commit }) {
-    firebase.database().ref('members').once('value')
-      .then(data => {
-        const members = []
-        const obj = data.val()
-        console.log(obj)
-        for (const key in obj) {
-          members.push({
-            name: obj[key].name,
-            id: key,
-            contact: obj[key].contact,
-            status: obj[key].status,
-            dateOfBirth: obj[key].dateOfBirth,
-            emgContact: obj[key].emgContact,
-            mdclCondition: obj[key].mdclCondition,
-            membershipFeeAmount: obj[key].membershipFeeAmount,
-            membershipFeeDate: obj[key].membershipFeeDate,
-            membershipType: obj[key].membershipType,
-            occupation: obj[key].occupation
-          })
-        }
-        commit('setLoadedMembers', members)
-      })
-      .catch(error => {
-        console.log(error)
-      })
   },
 
   // createUserRoles () {
@@ -357,8 +355,6 @@ export default {
 
   // PAYMENT
   addPayment ({ commit }, payload) {
-    commit('clearError')
-    commit('setSuccess', false)
     const payment = {
       member_id: payload.id,
       amount: payload.amount,

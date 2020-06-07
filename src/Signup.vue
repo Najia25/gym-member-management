@@ -1,19 +1,23 @@
 <template>
-  <div class="signup-wrapper">
-    <v-container>
-      <v-row>
-        <v-col col="12" sm="6" class="mx-auto">
-          <signup-form isAdminSignup="true" :staffTypes="staffTypes" @onSignUp="onSignUp">
-          </signup-form>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-app>
+    <v-content class="signup-wrapper">
+      <!-- <div class="signup-wrapper"> -->
+        <v-container>
+          <v-row>
+            <v-col col="12" sm="6" class="mx-auto">
+              <signup-form isAdminSignup="true" :staffTypes="staffTypes" @onSignUp="onSignUp">
+              </signup-form>
+            </v-col>
+          </v-row>
+        </v-container>
+      <!-- </div> -->
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 import SignupForm from '@/components/SignupForm'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 export default {
   components: {
     SignupForm
@@ -23,42 +27,25 @@ export default {
       staffTypes: ['Admin']
     }
   },
-  computed: {
-    ...mapState(['user'])
-  },
-  watch: {
-    user (value) {
-      if (value !== null && value !== undefined) {
-        this.$router.push('/')
-      }
-    }
-  },
   methods: {
     onSignUp (payload) {
-      payload = {
-        ...payload,
-        role: 'Admin'
+      // if session implemented later on..in order to prevent accessing this page by pasting url on browser add restriction on sign up, e.g - only admin who is logged in can submit this form
+      if (this.$store.state.adminExist === 0) {
+        this.$store.dispatch('addStaff', payload)
+      } else {
+        alert('Admin Exists!')
       }
-      console.log(payload)
-      this.$store.dispatch('signUpUser', payload)
+      this.$router.push('/signin')
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .signup-wrapper {
-  padding-top: 40vh;
-  overflow: hidden;
   text-align: center;
   align-items: center;
-  background:
-    linear-gradient(
-      to right,
-      rgba(0, 0, 0,0.1),
-      rgba(0, 0, 0, 0.7)
-    ),
-    url('assets/background.jpg') center top;
+  background: url('assets/signup-background.jpeg') center top;
   background-size: cover;
   height: 100vh;
   align-items: center;

@@ -5,12 +5,12 @@
         <v-card>
           <v-container>
             <v-card-title>
-              Approved Members List
+              All Members List
               <v-spacer></v-spacer>
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
               </v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="approvedMembers" :search="search"  disable-pagination hide-default-footer>
+            <v-data-table :headers="headers" :items="allMembers" :search="search"  disable-pagination hide-default-footer>
               <template v-slot:item.name="slotProps">
                 <router-link :to="{ name: 'member', params: { id: slotProps.item.id }}">{{ slotProps.item.name }}</router-link>
               </template>
@@ -42,10 +42,10 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('getApprovedMembers')
+    this.$store.dispatch('getAllMembers')
   },
   computed: {
-    ...mapState(['approvedMembers'])
+    ...mapState(['allMembers'])
   }
 }
 </script>

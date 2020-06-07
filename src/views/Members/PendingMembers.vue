@@ -43,9 +43,9 @@ export default {
         { text: 'Membership Type', align: 'center', sortable: false, value: 'membership_type' },
         { text: 'Registration amount', align: 'center', sortable: false, value: 'reg_amount' },
         { text: 'Registration date', align: 'center', sortable: false, value: 'reg_date' },
+        { text: 'Reference', align: 'center', sortable: false, value: 'reference' },
         { text: 'Action', sortable: false, value: 'action' }
       ]
-      // console.log(this.user.role)
       if (this.user.role === 'Admin') {
         return headers
       } else {
@@ -70,7 +70,7 @@ export default {
         id: item.id,
         status: 1
       }
-      this.$store.dispatch('updatePendingMembers', payload)
+      this.$store.dispatch('updateSingleMemberData', payload)
     }
   }
 }

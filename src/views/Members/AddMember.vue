@@ -103,7 +103,7 @@ export default {
   data () {
     return {
       items: ['Life Time'],
-      dateOfBirth: new Date().toISOString().substr(0, 10),
+      dateOfBirth: null,
       membershipFeeDate: new Date().toISOString().substr(0, 10),
       name: '',
       contact: 0,
@@ -132,6 +132,7 @@ export default {
         dateOfBirth: this.dateOfBirth,
         membershipFeeAmount: this.membershipFeeAmount,
         membershipFeeDate: this.membershipFeeDate,
+        staff_id: this.user.id,
         status: this.status
       }
       console.log(payload)

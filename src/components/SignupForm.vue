@@ -1,9 +1,9 @@
 <template>
-  <v-card class="mt-5">
-    <v-alert type="error" dismissible @input="onDismissed" text v-if="error">
+  <v-card class="mt-5" :color= "isAdminSignup ? 'rgba(0, 0, 0, 0.5)' : 'undefined'" :dark="isAdminSignup ? true : false">
+    <v-alert type="error" dismissible @input="onDismissed" v-if="error">
       {{ error.message }}
     </v-alert>
-    <v-alert type="success" dismissible @input="onDismissed" text v-if="success">
+    <v-alert type="success" dismissible @input="onDismissed" v-if="success">
       {{ msg }}
     </v-alert>
     <v-card-title>

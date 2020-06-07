@@ -27,7 +27,7 @@
 
 export default {
   name: 'date-picker',
-  props: ['label', 'membershipFeeDate', 'dateOfBirth', 'expire_date', 'paid_date', 'allowedDates'],
+  props: ['label', 'membershipFeeDate', 'dateOfBirth', 'expire_date', 'paid_date', 'allowedDates', 'fromDate', 'toDate'],
   data () {
     return {
       menu: false
@@ -44,6 +44,10 @@ export default {
           return this.expire_date
         } else if (this.paid_date) {
           return this.paid_date
+        } else if (this.fromDate) {
+          return this.fromDate
+        } else if (this.toDate) {
+          return this.toDate
         } else {
           return null
         }

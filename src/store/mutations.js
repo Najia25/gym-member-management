@@ -3,17 +3,19 @@ export default {
     state.home = payload
   },
   addUser (state, payload) {
-    console.log('chiao')
     state.user = payload
   },
-  adminExists (state, payload) {
-    state.adminExists = payload
+  adminExist (state, payload) {
+    state.adminExist = payload
   },
   updateSingleMemberData (state, payload) {
     const member = state.singleMember
 
     if (payload.membership_type) {
       member.membership_type = payload.membership_type
+    }
+    if (payload.status) {
+      member.status = payload.status
     }
     if (payload.name) {
       member.name = payload.name
@@ -63,16 +65,39 @@ export default {
       payment.development_fee = payload.development_fee
     }
   },
+  updateSingleStaff (state, payload) {
+    const staff = state.staffs.find(staff => {
+      return staff.id === payload.id
+    })
+    if (payload.email) {
+      staff.email = payload.email
+    }
+    if (payload.password) {
+      staff.password = payload.password
+    }
+    if (payload.type) {
+      staff.type = payload.type
+    }
+  },
   updatePendingMembers (state, payload) {
     state.pendingMembers.splice(state.pendingMembers.findIndex(member => member.id === payload), 1)
-    state.singleMember.status = 1
   },
   updatePendingPayments (state, payload) {
     state.pendingPayments.splice(state.pendingPayments.findIndex(payment => payment.id === payload), 1)
     // state.singleMember.status = 1
   },
+  deleteStaff (state, payload) {
+    state.staffs.splice(state.staffs.findIndex(staff => staff.id === payload), 1)
+    // state.singleMember.status = 1
+  },
   setApprovedMembers (state, payload) {
     state.approvedMembers = payload
+  },
+  setReferenceReport (state, payload) {
+    state.referenceReport = payload
+  },
+  setAllMembers (state, payload) {
+    state.allMembers = payload
   },
   setAllPayments (state, payload) {
     state.allPayments = payload

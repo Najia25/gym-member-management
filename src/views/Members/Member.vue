@@ -36,6 +36,8 @@
                   <p>{{ singleMember.reg_amount }}</p>
                   <p>Registration date:</p>
                   <p>{{ singleMember.reg_date }}</p>
+                  <p>Reference:</p>
+                  <p>{{ singleMember.reference}}</p>
                 </div>
               </v-list-item-content>
             </v-list-item>
@@ -150,9 +152,10 @@ export default {
       this.msg = 'Member approved'
       const payload = {
         status: 1,
-        id: this.singleMember.id
+        id: this.singleMember.id,
+        singleMember: true
       }
-      this.$store.dispatch('updatePendingMembers', payload)
+      this.$store.dispatch('updateSingleMemberData', payload)
     },
     addPayment () {
       this.msg = 'Payment added'

@@ -10,8 +10,5 @@ new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App),
-  created () {
-    this.$store.dispatch('adminExists')
-  }
+  render: h => h(App)
 }).$mount('#app')
