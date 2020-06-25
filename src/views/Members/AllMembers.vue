@@ -38,7 +38,8 @@ export default {
         { text: 'Registration amount', align: 'center', sortable: false, value: 'reg_amount' },
         { text: 'Registration date', align: 'center', sortable: false, value: 'reg_date' },
         { text: 'Reference', align: 'center', sortable: false, value: 'reference' }
-      ]
+      ],
+      isActive: false
     }
   },
   created () {

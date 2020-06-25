@@ -57,7 +57,7 @@
               <v-card outlined>
                 <v-container>
                   <v-card-text>
-                    <v-form @submit.prevent="addPayment" ref="form">
+                    <v-form ref="form">
                       <v-text-field
                         :counter="4"
                         v-model="amount"
@@ -83,7 +83,7 @@
                           color="primary"
                           outlined
                           class="mb-5 mt-5"
-                          type="submit"
+                          @click="addPayment"
                         >
                           Add payment
                           <template v-slot:loader>

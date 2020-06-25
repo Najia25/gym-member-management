@@ -7,7 +7,6 @@
     <v-card-text>
       <v-container>
         <v-form ref="form"
-        @submit.prevent = "onSignUp"
         >
           <v-select
             label="Staff type"
@@ -50,7 +49,7 @@
             :rules="[rules.required,passwordMatch]"
           ></v-text-field>
           <v-card-actions>
-            <v-btn class="primary mt-2" type="submit" :disabled="!formIsValid">Add</v-btn>
+            <v-btn class="primary mt-2" @click="onSignUp" :disabled="!formIsValid">Add</v-btn>
           </v-card-actions>
         </v-form>
       </v-container>

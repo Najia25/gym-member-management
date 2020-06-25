@@ -6,7 +6,7 @@
           <v-container>
             <v-card-title>Add New Member</v-card-title>
             <v-card-text>
-                <v-form @submit.prevent="addMember" ref="form">
+                <v-form ref="form">
                   <v-select
                     :items="items"
                     label="Membership Type"
@@ -66,7 +66,7 @@
                       color="primary"
                       large
                       class="mx-auto mb-5"
-                      type="submit"
+                      @click="addMember"
                     >
                       Add Member
                       <template v-slot:loader>
@@ -97,12 +97,6 @@ export default {
   },
   computed: {
     ...mapState(['user', 'error', 'success', 'loading'])
-
-    // formIsValid () {
-    //   return this.name !== '' &&
-    //   this.contact !== '' &&
-    //   this.address !== ''
-    // }
   },
   watch: {
     success () {

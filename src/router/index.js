@@ -15,7 +15,6 @@ import DashView from '@/Dash.vue'
 import Report from '@/views/Report/ReferenceReport.vue'
 import NotFoundView from '@/404.vue'
 import AuthGuard from './auth-guard'
-// import store from '../store'
 
 Vue.use(VueRouter)
 

@@ -1,77 +1,82 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="sideNav"
-    app
-    dark
-    mobile-break-point="960"
-    width="230"
-    :mini-variant.sync="mini"
-    color="rgb(25, 24, 24)"
+      app
+      dark
+      mobile-break-point="960"
+      width="225"
+      :mini-variant.sync="mini"
+      color="rgb(25, 24, 24)"
     >
-    <v-list class="pa-0">
-      <v-list-item class="primary justify-center" two-line >
-        <img src="@/assets/logo.png" :class="{ 'shrink-width': mini }"/>
-      </v-list-item>
-    </v-list>
+      <v-list class="pa-0">
+        <v-list-item class="primary justify-center">
+          <v-img src="@/assets/logo.png" aspect-ratio="1.7" contain max-height="41" max-width="110" min-width="56"></v-img>
+        </v-list-item>
+      </v-list>
 
-    <v-list three-line v-if="!mini && this.userIsAuthenticated" class="pa-0">
-      <v-list-item class="text-center online">
-        <v-list-item-content>
-          <v-icon>mdi-account-circle</v-icon>
-          <v-list-item-title class="role">{{ user.role }}</v-list-item-title>
-          <v-list-item-subtitle class="mt-2 status">online</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-        <v-list class="pa-0">
-            <v-list-item  to="/" v-if="this.userIsAuthenticated">
-              <v-list-item-icon>
-                <v-icon> mdi-home-outline </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> Home </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+      <v-list three-line v-if="!mini" color="#0000004f">
+        <v-list-item class="text-center">
+          <v-list-item-content>
+            <v-icon color="primary" size="24">mdi-account-circle</v-icon>
+            <v-list-item-title class="button text-uppercase font-weight-medium grey--text text--lighten-1 mt-2">{{ user.role }}</v-list-item-title>
+            <v-list-item-subtitle class="mr-3 grey--text text--lighten-1 body-2"><v-icon size="24" color="green">mdi-circle-medium</v-icon>online</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <v-list class="pa-0">
+        <v-list-item  to="/">
+          <v-list-item-icon>
+            <v-icon> mdi-home-outline </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Home </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-group
           v-for="item in menuItems"
           :key="item.title"
           no-action
+          :prepend-icon="item.icon"
           active-class="active-control"
         >
           <template v-slot:activator>
-            <v-list-item-icon>
+            <!-- <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
+            </v-list-item-icon> -->
             <v-list-item-content>
               <v-list-item-title v-text="item.title"></v-list-item-title>
             </v-list-item-content>
           </template>
-
             <v-list-item
               v-for="subItem in item.items"
               :key="subItem.title"
               :to="subItem.link"
             >
-
               <v-list-item-content>
                 <v-list-item-title v-text="subItem.title"></v-list-item-title>
               </v-list-item-content>
             </v-list-item>
         </v-list-group>
-            <v-list-item @click="onLogout" v-if="this.userIsAuthenticated">
-              <v-list-item-icon>
-                <v-icon> mdi-logout-variant </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> Logout </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-        </v-list>
+
+        <v-list-item @click="onLogout">
+          <v-list-item-icon>
+            <v-icon> mdi-logout-variant </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Logout </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
     </v-navigation-drawer>
 
-    <v-app-bar app>
-      <v-app-bar-nav-icon class="visible-md-and-up ml-1" @click.stop="mini = !mini"></v-app-bar-nav-icon >
-      <v-app-bar-nav-icon @click ="sideNav = !sideNav" class="hidden-md-and-up"></v-app-bar-nav-icon >
+    <v-app-bar app color="black" height="49">
+      <v-btn icon class="visible-md-and-up ml-1" color="primary" @click.stop="mini = !mini">
+        <v-icon large>mdi-menu</v-icon>
+      </v-btn>
+      <v-btn icon class="hidden-md-and-up" @click="sideNav = !sideNav" ><v-icon color="primary" large>mdi-menu</v-icon></v-btn>
     </v-app-bar>
 
     <v-content class="content-wrap">
@@ -85,7 +90,6 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  // name: 'App',
   data: () => ({
     sideNav: true,
     mini: false
@@ -151,10 +155,6 @@ export default {
         ]
       }
       return menuItems
-    },
-
-    userIsAuthenticated () {
-      return this.user !== null && this.user !== undefined
     }
   },
   methods: {
@@ -165,77 +165,34 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "@/scss/variables.scss";
 .active-control {
   background: black;
 }
-.shrink-width {
-  width:56px;
-  height: 34px;
-}
-.v-list-item__title {
-  font-size: .875rem;
+
+.v-list-item {
+  &__icon {
+    margin-right: 10px !important;
+  }
+  &__title {
+    font-size: .875rem;
+  }
+  &--active::before, &--active:hover::before {
+    opacity: 0 !important;
+  }
 }
 
-.v-list-item .v-list-item__icon {
-  margin-right: 10px !important;
-}
-.v-icon.v-icon {
-  font-size: 20px !important;
-}
-.theme--light.v-app-bar.v-toolbar.v-sheet {
-  background-color: #191818 !important;
-  color: #ffd600;
+.v-icon {
+  font-size: $icon-size;
 }
 
 .content-wrap {
   background: #8080801a;
 }
 
-.role {
-  font-size: .89rem;
-  color: #bab5b5;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-top: 8px;
-  margin-bottom: .5px !important;
-}
-.online {
-  background: #0000004f;
-  line-height: 22px;
-}
-i.v-icon.notranslate.mdi.mdi-account-circle.theme--dark {
-  color: #ffd600;
-  font-size: 1.5rem !important;
-}
-.status {
-  position: relative;
-}
-.status::after {
-  position: absolute;
-  content: "";
-  width: 10px;
-  height: 10px;
-  top: 2px;
-  left: 55px;
-  background: #0cae0c;
-  border-radius: 100%;
-  border: 1px solid #0cae0c;
-}
-
-i.v-icon.notranslate.mdi.mdi-menu.theme--light {
-  font-size: 34px !important;
-}
-.theme--light.v-btn.v-btn--icon {
-  color: #ffd600 !important;
-}
-
-.theme--dark.v-list-item--active:hover::before, .theme--dark.v-list-item--active::before {
-  opacity: 0 !important;
-}
-
 .v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
-    padding-left: 49px !important;
+  padding-left: 49px !important;
 }
 
 .mdi-chevron-down::before {
