@@ -10,6 +10,9 @@
               Pending New Payments
             </v-card-title>
             <v-data-table :headers="headers" :items="pendingPayments"  :loading="loadingTable" loading-text="Loading... Please wait" hide-default-footer disable-pagination>
+              <template v-slot:item.name="{ item }">
+                <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: item.member_id }}">{{ item.name }}</router-link>
+              </template>
               <template v-slot:item.action="{ item }">
                 <!-- <v-btn small outlined  color="primary" @click="updatePendingPayment(item)" v-if="user.role === 'Admin'" class="mr-2">Approve</v-btn> -->
                 <v-btn

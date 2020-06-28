@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     addStaff (payload) {
-      console.log(payload)
       this.$store.dispatch('addStaff', payload)
     }
   }

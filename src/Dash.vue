@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="sideNav"
       app
       dark
-      mobile-break-point="960"
+      mobile-breakpoint="960"
       width="225"
       :mini-variant.sync="mini"
       color="rgb(25, 24, 24)"
@@ -74,16 +74,16 @@
 
     <v-app-bar app color="black" height="49">
       <v-btn icon class="visible-md-and-up ml-1" color="primary" @click.stop="mini = !mini">
-        <v-icon large>mdi-menu</v-icon>
+        <v-icon large>mdi-sort-variant</v-icon>
       </v-btn>
-      <v-btn icon class="hidden-md-and-up" @click="sideNav = !sideNav" ><v-icon color="primary" large>mdi-menu</v-icon></v-btn>
+      <v-btn icon class="hidden-md-and-up" @click="sideNav = !sideNav" ><v-icon color="primary" large>mdi-sort-variant</v-icon></v-btn>
     </v-app-bar>
 
-    <v-content class="content-wrap">
+    <v-main class="content-wrap">
       <v-container fluid>
         <router-view></router-view>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

@@ -10,9 +10,9 @@
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
               </v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="allMembers" :search="search"  :loading="loading ? true : false" loading-text="Loading... Please wait" disable-pagination hide-default-footer>
+            <v-data-table :headers="headers" :items="allMembers" :search="search"  :loading="loading" loading-text="Loading... Please wait" disable-pagination hide-default-footer>
               <template v-slot:item.name="slotProps">
-                <router-link class="text-black" :to="{ name: 'member', params: { id: slotProps.item.id }}">{{ slotProps.item.name }}</router-link>
+                <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: slotProps.item.id }}">{{ slotProps.item.name }}</router-link>
               </template>
             </v-data-table>
           </v-container>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -39,14 +39,21 @@ export default {
         { text: 'Registration date', align: 'center', sortable: false, value: 'reg_date' },
         { text: 'Reference', align: 'center', sortable: false, value: 'reference' }
       ],
-      isActive: false
+      loading: false,
+      allMembers: []
     }
   },
   created () {
-    this.$store.dispatch('getAllMembers')
-  },
-  computed: {
-    ...mapState(['allMembers', 'loading'])
+    this.loading = true
+    axios.get('http://api.zahin.me/api/members')
+      .then(response => {
+        this.loading = false
+        this.allMembers = response.data.data
+      })
+      .catch(error => {
+        this.loading = false
+        console.log(error)
+      })
   }
 }
 </script>

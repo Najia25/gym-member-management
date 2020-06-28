@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content class="signup-wrapper">
+    <v-main class="signup-wrapper">
       <!-- <div class="signup-wrapper"> -->
         <v-container>
           <v-row>
@@ -11,7 +11,7 @@
           </v-row>
         </v-container>
       <!-- </div> -->
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

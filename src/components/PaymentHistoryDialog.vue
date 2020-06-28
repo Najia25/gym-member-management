@@ -28,11 +28,10 @@
         >
           <template v-slot:item.status="{ item }">
             {{ returnPaymentStatus(item) }}
-            <!-- {{ item.status === 0 ? "Pending" : "Approved" }} -->
           </template>
-          <!-- <template v-slot:item.action="{ item }">
-            <edit-payment-details-dialog :item="item"></edit-payment-details-dialog>
-          </template> -->
+          <template v-slot:item.action="{ item }" v-if="user.role === 'Admin'">
+            <edit-payment-details-dialog :item="item" :id="id"></edit-payment-details-dialog>
+          </template>
         </v-data-table>
         <v-card-actions>
           <v-btn @click="paymentDialog = false" color="primary">close</v-btn>
@@ -44,13 +43,13 @@
 
 <script>
 import { mapState } from 'vuex'
-// import EditPaymentDetailsDialog from '@/components/EditPaymentDetailsDialog.vue'
+import EditPaymentDetailsDialog from '@/components/EditPaymentDetailsDialog.vue'
 export default {
   name: 'payment-history-dialog',
   props: ['id'],
-  // components: {
-  //   EditPaymentDetailsDialog
-  // },
+  components: {
+    EditPaymentDetailsDialog
+  },
   data () {
     return {
       paymentDialog: false,
@@ -62,13 +61,13 @@ export default {
         { text: 'Description', sortable: false, value: 'description' },
         { text: 'Service Fee', sortable: false, value: 'service_fee' },
         { text: 'Development Fee', sortable: false, value: 'development_fee' },
-        { text: 'Status', sortable: false, value: 'status' }
-        // { text: 'Action', sortable: false, value: 'action' }
+        { text: 'Status', sortable: false, value: 'status' },
+        { text: 'Action', sortable: false, value: 'action' }
       ]
     }
   },
   computed: {
-    ...mapState(['allPayments', 'loading']),
+    ...mapState(['allPayments', 'loading', 'user']),
     loadingAllPayments () {
       if (this.loading && this.loading.type === 'allPayments') {
         return true

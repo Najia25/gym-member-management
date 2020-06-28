@@ -1,7 +1,7 @@
 import router from '../router'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://api.najiaafrin.com/api'
+axios.defaults.baseURL = 'http://api.zahin.me/api'
 
 export default {
   getHomeItems ({ commit }) {

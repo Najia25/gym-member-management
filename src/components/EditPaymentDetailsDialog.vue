@@ -61,14 +61,16 @@ export default {
   components: {
     DatePicker
   },
-  props: ['item'],
+  props: ['item', 'id'],
   data () {
     return {
       editDialog: false,
       paid_date: this.item.paid_date,
       expire_date: this.item.expire_date,
       amount: this.item.amount,
-      description: this.item.description
+      member_id: 0,
+      description: this.item.description,
+      singleMember: false
     }
   },
   methods: {
@@ -79,21 +81,25 @@ export default {
       this.expire_date = date
     },
     onSaveChanges () {
-      // if (this.amount.trim() === '' && this.description.trim() === '') {
-      //   return
-      // }
-      // this.editDialog = false
+      if (this.id) {
+        this.member_id = this.id
+        this.singleMember = true
+      } else {
+        this.member_id = this.item.member_id
+      }
       console.log(this.item)
       const payload = {
         id: this.item.id,
-        member_id: this.item.member_id,
+        member_id: this.member_id,
         amount: this.amount,
         paid_date: this.paid_date,
         expire_date: this.expire_date,
         description: this.description,
         service_fee: this.getServiceFee,
-        development_fee: this.getDevelopmentFee
+        development_fee: this.getDevelopmentFee,
+        singleMember: this.singleMember
       }
+      console.log(payload)
       this.$store.dispatch('updateSinglePaymentData', payload)
     }
   },

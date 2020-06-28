@@ -43,9 +43,19 @@ export default {
     }
   },
   updateSinglePaymentData (state, payload) {
-    const payment = state.pendingPayments.find(payment => {
-      return payment.id === payload.id
-    })
+    let payment = {}
+    if (payload.singleMember) {
+      payment = state.allPayments.find(payment => {
+        return payment.id === payload.id
+      })
+    } else {
+      payment = state.pendingPayments.find(payment => {
+        return payment.id === payload.id
+      })
+    }
+    // const payment = state.allPayments.find(payment => {
+    //   return payment.id === payload.id
+    // })
     if (payload.amount) {
       payment.amount = payload.amount
     }

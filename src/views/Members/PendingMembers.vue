@@ -12,9 +12,9 @@
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
               </v-text-field>
             </v-card-title>
-            <v-data-table class="text-black" :headers="pendingMembersHeaders" :items="pendingMembers"  :loading="loadingTable" loading-text="Loading... Please wait" disable-pagination hide-default-footer>
+            <v-data-table :search="search" :headers="pendingMembersHeaders" :items="pendingMembers"  :loading="loadingTable" loading-text="Loading... Please wait" disable-pagination hide-default-footer>
               <template v-slot:item.name="{ item }">
-                <router-link :to="{ name: 'member', params: { id: item.id }}">{{ item.name }}</router-link>
+                <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: item.id }}">{{ item.name }}</router-link>
               </template>
               <template v-slot:item.action="{ item }" v-if="user.role === 'Admin'">
                 <!-- <v-btn small color="primary" @click="updatePendingMember(item)">Approve</v-btn> -->

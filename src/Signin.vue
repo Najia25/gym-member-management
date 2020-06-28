@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <v-img src="@/assets/background.jpg" lazy-src="@/assets/background-min.jpg" :aspect-ratio="16/9" class="maxHeight">
         <v-row align="center" class="signup-wrapper fill-height">
           <v-col col="12" sm="6" class="mx-auto">
@@ -50,7 +50,7 @@
           </v-col>
         </v-row>
       </v-img>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
