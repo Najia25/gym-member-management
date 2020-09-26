@@ -6,7 +6,7 @@
           <v-container>
             <v-card-title>Add New Member</v-card-title>
             <v-card-text>
-                <v-form ref="form">
+                <v-form ref="form" v-model="valid">
                   <v-select
                     :items="items"
                     label="Membership Type"
@@ -21,14 +21,14 @@
                   <v-text-field
                     type="number"
                     v-model="contact"
-                    :counter="11"
+                    counter="11"
                     label="Contact"
                     :rules="[rules.required]"
                   ></v-text-field>
                   <v-text-field
                     type="number"
                     v-model="emgContact"
-                    :counter="11"
+                    counter="11"
                     label="Emergency Contact"
                     :rules="[rules.required]"
                   ></v-text-field>
@@ -49,9 +49,10 @@
                       <v-card-title>Membership fee payment</v-card-title>
                       <v-card-text>
                           <v-text-field
-                            :counter="4"
+                            counter="4"
                             label="Paid amount"
                             type="number"
+                            :rules="[rules.required]"
                             v-model="membershipFeeAmount"
                           ></v-text-field>
                           <date-picker @passDate="getMembershipFeeDate" :membershipFeeDate="membershipFeeDate" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
@@ -62,7 +63,7 @@
                     <!-- <v-btn color="primary" large class="mx-auto mb-5" type="submit">Add Member</v-btn> -->
                     <v-btn
                       :loading="loading ? true : false"
-                      :disabled="loading ? true : false"
+                      :disabled="loading || !valid ? true : false"
                       color="primary"
                       large
                       class="mx-auto mb-5"
@@ -118,6 +119,7 @@ export default {
       membershipType: '',
       membershipFeeAmount: 0,
       status: 0,
+      valid: false,
       rules: {
         required: value => !!value || 'Required.'
       },

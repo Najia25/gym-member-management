@@ -11,7 +11,7 @@
               </v-text-field>
             </v-card-title>
             <v-data-table :headers="headers" :items="allMembers" :search="search"  :loading="loading" loading-text="Loading... Please wait" disable-pagination hide-default-footer>
-              <template v-slot:item.name="slotProps">
+              <template v-slot:[`item.name`]="slotProps">
                 <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: slotProps.item.id }}">{{ slotProps.item.name }}</router-link>
               </template>
             </v-data-table>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -45,14 +44,13 @@ export default {
   },
   created () {
     this.loading = true
-    axios.get('http://api.zahin.me/api/members')
+    this.$http.get('/members')
       .then(response => {
         this.loading = false
         this.allMembers = response.data.data
       })
-      .catch(error => {
+      .catch(() => {
         this.loading = false
-        console.log(error)
       })
   }
 }

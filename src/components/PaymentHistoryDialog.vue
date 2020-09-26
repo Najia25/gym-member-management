@@ -22,14 +22,14 @@
         <v-data-table
           :headers="headers"
           :items="allPayments"
-          :loading="loadingAllPayments"
+          :loading="loadPaymentHistory"
           disable-pagination
           hide-default-footer
         >
-          <template v-slot:item.status="{ item }">
+          <template v-slot:[`item.status`]="{ item }">
             {{ returnPaymentStatus(item) }}
           </template>
-          <template v-slot:item.action="{ item }" v-if="user.role === 'Admin'">
+          <template v-slot:[`item.action`]="{ item }" v-if="user.role === 'Admin'">
             <edit-payment-details-dialog :item="item" :id="id"></edit-payment-details-dialog>
           </template>
         </v-data-table>
@@ -54,7 +54,29 @@ export default {
     return {
       paymentDialog: false,
       search: '',
-      headers: [
+      loadPaymentHistory: false
+    }
+  },
+  watch: {
+    loading () {
+      if (!this.loading) {
+        if (this.loadPaymentHistory) {
+          this.loadPaymentHistory = false
+        }
+      }
+    }
+  },
+  computed: {
+    ...mapState(['allPayments', 'loading', 'user']),
+    // loadingAllPayments () {
+    //   if (this.loading && this.loading.type === 'allPayments') {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // },
+    headers () {
+      const headers = [
         { text: 'Amount', align: 'start', sortable: false, value: 'amount' },
         { text: 'Paid Date', sortable: false, value: 'paid_date' },
         { text: 'Expire Date', sortable: false, value: 'expire_date' },
@@ -64,21 +86,18 @@ export default {
         { text: 'Status', sortable: false, value: 'status' },
         { text: 'Action', sortable: false, value: 'action' }
       ]
-    }
-  },
-  computed: {
-    ...mapState(['allPayments', 'loading', 'user']),
-    loadingAllPayments () {
-      if (this.loading && this.loading.type === 'allPayments') {
-        return true
+      if (this.user.role === 'Admin') {
+        return headers
       } else {
-        return false
+        headers.pop()
+        return headers
       }
     }
   },
   methods: {
     onBtnClick () {
       this.$store.dispatch('getAllPayments', this.id)
+      this.loadPaymentHistory = this.loading
     },
     returnPaymentStatus (item) {
       if (parseInt(item.status) === 0) {

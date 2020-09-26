@@ -10,11 +10,10 @@
               Pending New Payments
             </v-card-title>
             <v-data-table :headers="headers" :items="pendingPayments"  :loading="loadingTable" loading-text="Loading... Please wait" hide-default-footer disable-pagination>
-              <template v-slot:item.name="{ item }">
+              <template v-slot:[`item.name`]="{ item }">
                 <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: item.member_id }}">{{ item.name }}</router-link>
               </template>
-              <template v-slot:item.action="{ item }">
-                <!-- <v-btn small outlined  color="primary" @click="updatePendingPayment(item)" v-if="user.role === 'Admin'" class="mr-2">Approve</v-btn> -->
+              <template v-slot:[`item.action`]="{ item }">
                 <v-btn
                   :loading="loadingApprove(item)"
                   :disabled="loadingApprove(item)"
@@ -23,7 +22,7 @@
                   outlined
                   @click="updatePendingPayment(item)"
                   v-if="user.role === 'Admin'"
-                  class="mr-2"
+                  class="mb-2 mt-2 mr-2"
                 >
                   Approve
                   <template v-slot:loader>
@@ -34,6 +33,7 @@
                 </v-btn>
                 <!-- <v-btn outlined small color="primary" @click="EditPayment(item)">Edit</v-btn> -->
                 <edit-payment-details-dialog :item="item"></edit-payment-details-dialog>
+                <print-memo :item="item"></print-memo>
               </template>
             </v-data-table>
           </v-container>
@@ -46,25 +46,15 @@
 <script>
 import { mapState } from 'vuex'
 import SnackBar from '@/components/SnackBar.vue'
-import EditPaymentDetailsDialog from '@/components/EditPaymentDetailsDialog.vue'
+// import EditPaymentDetailsDialog from '@/components/EditPaymentDetailsDialog.vue'
 export default {
   components: {
     SnackBar,
-    EditPaymentDetailsDialog
+    EditPaymentDetailsDialog: () => import('@/components/EditPaymentDetailsDialog.vue'),
+    PrintMemo: () => import('@/components/PrintMemo.vue')
   },
   computed: {
-    ...mapState(['user', 'pendingPayments', 'error', 'success', 'loading']),
-    loadingTable () {
-      if (this.loading && !this.loading.id) {
-        if (this.loading.type === 'pendingPayments') {
-          return true
-        } else {
-          return false
-        }
-      } else {
-        return false
-      }
-    }
+    ...mapState(['user', 'pendingPayments', 'error', 'success', 'loading'])
   },
   data () {
     return {
@@ -76,17 +66,20 @@ export default {
         { text: 'Description', align: 'center', sortable: false, value: 'description' },
         { text: 'Payment Date', align: 'center', sortable: false, value: 'paid_date' },
         { text: 'Expire Date', align: 'center', sortable: false, value: 'expire_date' },
-        { text: 'Action', sortable: false, value: 'action' }
+        { text: 'Action', align: 'center', sortable: false, value: 'action' }
       ],
-      msg: 'Payment approved'
+      msg: 'Payment approved',
+      loadingTable: false,
+      loadingItemId: 0
     }
   },
   created () {
     this.$store.dispatch('getPendingPayments')
-    // 26:37 post
+    this.loadingTable = this.loading
   },
   methods: {
     updatePendingPayment (item) {
+      this.loadingItemId = item.id
       const payload = {
         id: item.id,
         member_id: item.member_id,
@@ -95,21 +88,26 @@ export default {
       this.$store.dispatch('updatePendingPayments', payload)
     },
     loadingApprove (item) {
-      if (this.loading && this.loading.id) {
-        if (this.loading.type === 'approvePayments' && this.loading.id === item.id) {
-          return true
-        } else {
-          return false
-        }
+      if (this.loading && item.id === this.loadingItemId) {
+        return true
       } else {
         return false
+      }
+    }
+  },
+  watch: {
+    loading () {
+      if (!this.loading) {
+        if (this.loadingTable) {
+          this.loadingTable = false
+        }
       }
     }
   }
 }
 </script>
 <style>
-  @media (min-width: 600px) {
+  /* @media (min-width: 600px) {
     .v-data-table td {
       height: 72px !important;
     }
@@ -124,5 +122,5 @@ export default {
     .v-application .mr-2 {
       margin-bottom: 0px;
     }
-  }
+  } */
 </style>

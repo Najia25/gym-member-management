@@ -17,7 +17,7 @@
             </v-card-title>
             <v-data-table :headers="headers" :items="home" :search="search" :loading="loading" loading-text="Loading... Please wait" hide-default-footer disable-pagination>
                 <template v-slot:item="{ item }">
-                  <tr class="text-center" v-bind:class="{'green accent-1': isGreen(item.remaining_days), 'lime accent-1': isYellow(item.remaining_days), 'red accent-1': isRed(item.remaining_days) }">
+                  <tr class="text-center" v-bind:class="{'green accent-1': isGreen(item.remaining_days), 'lime accent-1': isYellow(item.remaining_days), 'red accent-1': isRed(item.remaining_days), 'd-none': item.remaining_days < -7 }">
                     <td>{{ item.id }}</td>
                     <td>
                       <router-link class="black--text text-decoration-none" :to="{ name: 'member', params: { id: item.id }}">{{ item.name }}</router-link>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -59,14 +58,13 @@ export default {
   },
   created () {
     this.loading = true
-    axios.get('http://api.zahin.me/api/homepage')
+    this.$http.get('/homepage')
       .then(response => {
         this.loading = false
         this.home = response.data
       })
-      .catch(error => {
+      .catch(() => {
         this.loading = false
-        console.log(error)
       })
   },
   methods: {

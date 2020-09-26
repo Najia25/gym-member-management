@@ -4,7 +4,7 @@
   v-model="editDialog"
   >
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on" outlined small color="primary">Edit</v-btn>
+      <v-btn v-on="on" outlined small color="primary" class="mr-2">Edit</v-btn>
     </template>
     <v-card>
       <v-container>
@@ -70,7 +70,8 @@ export default {
       amount: this.item.amount,
       member_id: 0,
       description: this.item.description,
-      singleMember: false
+      singleMember: false,
+      loadingEditPayment: false
     }
   },
   methods: {
@@ -87,7 +88,6 @@ export default {
       } else {
         this.member_id = this.item.member_id
       }
-      console.log(this.item)
       const payload = {
         id: this.item.id,
         member_id: this.member_id,
@@ -99,8 +99,8 @@ export default {
         development_fee: this.getDevelopmentFee,
         singleMember: this.singleMember
       }
-      console.log(payload)
       this.$store.dispatch('updateSinglePaymentData', payload)
+      this.loadingEditPayment = this.loading
     }
   },
   computed: {
@@ -110,19 +110,15 @@ export default {
     },
     getDevelopmentFee () {
       return (this.amount * 0.4).toFixed(2)
-    },
-    loadingEditPayment () {
-      if (this.loading && this.loading.type === 'editPaymentDetails') {
-        return true
-      } else {
-        return false
-      }
     }
   },
   watch: {
-    loadingEditPayment () {
-      if (!this.loadingEditPayment) {
-        this.editDialog = false
+    loading () {
+      if (!this.loading) {
+        if (this.loadingEditPayment) {
+          this.loadingEditPayment = false
+          this.editDialog = false
+        }
       }
     }
   }

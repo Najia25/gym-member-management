@@ -5,9 +5,6 @@ export default {
   addUser (state, payload) {
     state.user = payload
   },
-  adminExist (state, payload) {
-    state.adminExist = payload
-  },
   updateSingleMemberData (state, payload) {
     const member = state.singleMember
 

@@ -1,20 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 import Signin from '@/Signin.vue'
-import ActiveMembers from '../views/Members/ActiveMembers.vue'
-import AllMembers from '../views/Members/AllMembers.vue'
+// import ActiveMembers from '../views/Members/ActiveMembers.vue'
+// import AllMembers from '../views/Members/AllMembers.vue'
 import PendingMembers from '../views/Members/PendingMembers.vue'
 import AddMember from '../views/Members/AddMember.vue'
-import Member from '../views/Members/Member.vue'
 import PendingPayments from '../views/Payments/PendingPayments.vue'
-import AddStaff from '../views/Staff/AddStaff.vue'
-import StaffList from '../views/Staff/StaffList.vue'
-import Signup from '@/Signup.vue'
+// import AddStaff from '../views/Staff/AddStaff.vue'
+// import StaffList from '../views/Staff/StaffList.vue'
 import DashView from '@/Dash.vue'
 import Report from '@/views/Report/ReferenceReport.vue'
 import NotFoundView from '@/404.vue'
 import AuthGuard from './auth-guard'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -27,19 +26,19 @@ const routes = [
         path: 'home',
         name: 'home',
         alias: '',
-        component: Home,
+        component: () => import('../views/Home.vue'),
         beforeEnter: AuthGuard
       },
-      {
-        path: 'members/all-members',
-        name: 'allmembers',
-        component: AllMembers,
-        beforeEnter: AuthGuard
-      },
+      // {
+      //   path: 'members/all-members',
+      //   name: 'allmembers',
+      //   component: () => import('../views/Members/AllMembers.vue'),
+      //   beforeEnter: AuthGuard
+      // },
       {
         path: 'members/active-members',
         name: 'activemembers',
-        component: ActiveMembers,
+        component: () => import('../views/Members/ActiveMembers.vue'),
         beforeEnter: AuthGuard
       },
       {
@@ -63,19 +62,31 @@ const routes = [
       {
         path: 'staff/add-staff',
         name: 'addstaff',
-        component: AddStaff,
-        beforeEnter: AuthGuard
+        component: () => import('../views/Staff/AddStaff.vue'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.user && store.state.user.role === 'Admin') {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
       },
       {
         path: 'staff/staff-list',
         name: 'stafflist',
-        component: StaffList,
-        beforeEnter: AuthGuard
+        component: () => import('../views/Staff/StaffList.vue'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.user && store.state.user.role === 'Admin') {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
       },
       {
         path: 'members/:id',
         name: 'member',
-        component: Member,
+        component: () => import('../views/Members/Member.vue'),
         props: true,
         beforeEnter: AuthGuard
       },
@@ -83,7 +94,13 @@ const routes = [
         path: 'reports/reference-report',
         name: 'referencereport',
         component: Report,
-        beforeEnter: AuthGuard
+        beforeEnter: (to, from, next) => {
+          if (store.state.user && store.state.user.role === 'Admin') {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
       }
     ]
   },
@@ -93,18 +110,13 @@ const routes = [
     component: Signin
   },
   {
-    path: '/signup',
-    name: 'Signup',
-    component: Signup
-  },
-  {
     path: '*',
     component: NotFoundView
   }
 ]
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

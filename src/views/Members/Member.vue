@@ -64,11 +64,6 @@
                         label="Paid amount"
                         type="number"
                       ></v-text-field>
-                      <!-- <v-text-field
-                        :counter="4"
-                        label="Due amount"
-                        type="number"
-                      ></v-text-field> -->
                       <date-picker @passDate="getMonthlyFeePaymentDate" :paid_date="paid_date" label='Payment Date'></date-picker> <!-- emit event and fetch picked date -->
                       <date-picker @passDate="getExpiryDate" :allowedDates="allowedDates" :expire_date="expire_date" label='Expiry Date'></date-picker>
                       <v-text-field
@@ -76,7 +71,6 @@
                         label="Description"
                       ></v-text-field>
                       <v-card-actions>
-                        <!-- <v-btn color="primary" outlined class="mb-5 mt-5" type="submit">Add payment</v-btn> -->
                         <v-btn
                           :loading="loadingAddPayment"
                           :disabled="loadingAddPayment"
@@ -111,16 +105,14 @@
 </template>
 
 <script>
-import PaymentHistoryDialog from '@/components/PaymentHistoryDialog.vue'
-import EditUserDetailsDialog from '@/components/EditUserDetailsDialog.vue'
 import DatePicker from '@/components/DatePicker.vue'
 import SnackBar from '@/components/SnackBar.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    PaymentHistoryDialog,
-    EditUserDetailsDialog,
+    PaymentHistoryDialog: () => import('@/components/PaymentHistoryDialog.vue'),
+    EditUserDetailsDialog: () => import('@/components/EditUserDetailsDialog.vue'),
     DatePicker,
     SnackBar
   },
@@ -132,7 +124,9 @@ export default {
       amount: 0,
       status: 0,
       description: '',
-      msg: 'Member Data Edited succesfully'
+      msg: 'Member Data Edited succesfully',
+      loadingSingleMember: false,
+      loadingAddPayment: false
     }
   },
   computed: {
@@ -158,20 +152,6 @@ export default {
       } else {
         return undefined
       }
-    },
-    loadingSingleMember () {
-      if (this.loading && this.loading.type === 'singleMember') {
-        return true
-      } else {
-        return false
-      }
-    },
-    loadingAddPayment () {
-      if (this.loading && this.loading.type === 'addPayment') {
-        return true
-      } else {
-        return false
-      }
     }
   },
   watch: {
@@ -179,10 +159,21 @@ export default {
       if (this.success) {
         this.$refs.form.reset()
       }
+    },
+    loading () {
+      if (!this.loading) {
+        if (this.loadingSingleMember) {
+          this.loadingSingleMember = false
+        }
+        if (this.loadingAddPayment) {
+          this.loadingAddPayment = false
+        }
+      }
     }
   },
   created () {
     this.$store.dispatch('getSingleMember', this.id)
+    this.loadingSingleMember = this.loading
   },
   methods: {
     getMonthlyFeePaymentDate (date) {
@@ -212,7 +203,7 @@ export default {
         development_fee: this.getDevelopmentFee
       }
       this.$store.dispatch('addPayment', payload)
-      // this.$refs.form.reset()
+      this.loadingAddPayment = this.loading
     }
   }
 }

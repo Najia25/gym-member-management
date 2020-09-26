@@ -1,47 +1,29 @@
 import router from '../router'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://api.zahin.me/api'
+axios.defaults.baseURL = 'http://api.najiaafrin.com/api'
 
 export default {
-  getHomeItems ({ commit }) {
-    commit('setLoading', true)
-    axios.get('/homepage')
-      .then(response => {
-        commit('setLoading', null)
-        commit('setHomePageItems', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-        commit('setLoading', null)
-      })
-  },
   getPendingMembers ({ commit }) {
-    commit('setLoading', {
-      type: 'pendingMembers'
-    })
+    commit('setLoading', true)
     axios.get('/inactiveMembers')
       .then(response => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setPendingMembers', response.data.data)
       })
-      .catch(error => {
-        console.log(error)
-        commit('setLoading', null)
+      .catch(() => {
+        commit('setLoading', false)
       })
   },
   getPendingPayments ({ commit }) {
-    commit('setLoading', {
-      type: 'pendingPayments'
-    })
+    commit('setLoading', true)
     axios.get('/pendingPayments')
       .then(response => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setpendingPayments', response.data)
       })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
+      .catch(() => {
+        commit('setLoading', false)
       })
   },
   getReferenceReport ({ commit }, payload) {
@@ -51,69 +33,35 @@ export default {
         commit('setLoading', null)
         commit('setReferenceReport', response.data)
       })
-      .catch(error => {
+      .catch(() => {
         commit('setLoading', null)
-        console.log(error)
       })
   },
   // ADMIN
-  getApprovedMembers ({ commit }) {
-    commit('setLoading', true)
-    axios.get('/activeMembers')
-      .then(response => {
-        commit('setLoading', null)
-        commit('setApprovedMembers', response.data.data)
-      })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
-      })
-  },
-  getAllMembers ({ commit }) {
-    commit('setLoading', true)
-    axios.get('/members')
-      .then(response => {
-        commit('setLoading', null)
-        commit('setAllMembers', response.data.data)
-      })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
-      })
-  },
   getAllPayments ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'allPayments'
-    })
+    commit('setLoading', true)
     axios.get(`/members/${payload}/payments`)
       .then(response => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setAllPayments', response.data.data)
       })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
+      .catch(() => {
+        commit('setLoading', false)
       })
   },
   getSingleMember ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'singleMember'
-    })
+    commit('setLoading', true)
     axios.get(`/members/${payload}`)
       .then(response => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setSingleMember', response.data.data[0])
       })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
+      .catch(() => {
+        commit('setLoading', false)
       })
   },
   updatePendingMembers ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'approveMembers',
-      id: payload.id
-    })
+    commit('setLoading', true)
     commit('clearError')
     commit('setSuccess', false)
     const status = {
@@ -121,24 +69,20 @@ export default {
     }
     axios.patch('/members/' + payload.id, status)
       .then(() => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('updatePendingMembers', payload.id)
         commit('setSuccess', true)
       })
       .catch(error => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setError', error)
-        console.log(error)
       })
   },
   updateSingleMemberData ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'editUserDetails'
-    })
+    commit('setLoading', true)
     commit('clearError')
     commit('setSuccess', false)
     const updateObj = {}
-    // console.log(payload)
     if (payload.membership_type) {
       updateObj.membership_type = payload.membership_type
     }
@@ -173,20 +117,16 @@ export default {
       .then(() => {
         // commit('updatePendingMembers', payload.id)
         commit('updateSingleMemberData', payload)
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setSuccess', true)
       })
       .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
+        commit('setLoading', false)
         commit('setError', error)
       })
   },
   updatePendingPayments ({ commit }, payload) {
-    commit('setLoading', {
-      id: payload.id,
-      type: 'approvePayments'
-    })
+    commit('setLoading', true)
     commit('clearError')
     commit('setSuccess', false)
     const status = {
@@ -195,21 +135,18 @@ export default {
     axios.patch(`/members/${payload.member_id}/payments/${payload.id}`, status)
       .then(() => {
         // commit('addApprovedMember', payload)
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setSuccess', true)
         commit('updatePendingPayments', payload.id)
       })
       .catch(error => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setError', error)
-        console.log(error)
         // commit('setLoading', false)
       })
   },
   updateSinglePaymentData ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'editPaymentDetails'
-    })
+    commit('setLoading', true)
     const updateObj = {}
     if (payload.amount) {
       updateObj.amount = payload.amount
@@ -231,12 +168,11 @@ export default {
     }
     axios.patch(`/members/${payload.member_id}/payments/${payload.id}`, updateObj)
       .then(() => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('updateSinglePaymentData', payload)
       })
-      .catch(error => {
-        commit('setLoading', null)
-        console.log(error)
+      .catch(() => {
+        commit('setLoading', false)
       })
   },
   deleteStaff ({ commit }, payload) {
@@ -247,9 +183,7 @@ export default {
       .then(() => {
         commit('deleteStaff', payload.id)
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(() => {})
   },
   updateSingleStaff ({ commit }, payload) {
     const updateObj = {}
@@ -265,9 +199,6 @@ export default {
     axios.patch(`/staffs/${payload.id}`, updateObj)
       .then(() => {
         commit('updateSingleStaff', payload)
-      })
-      .catch(error => {
-        console.log(error)
       })
   },
   addMember ({ commit }, payload) {
@@ -288,7 +219,6 @@ export default {
       status: payload.status
     }
     // let userId
-    console.log(member)
     axios.post('/members', member)
       .then(response => {
         commit('setLoading', null)
@@ -297,17 +227,6 @@ export default {
       .catch(error => {
         commit('setLoading', null)
         commit('setError', error)
-        console.log(error)
-      })
-  },
-
-  adminExists ({ commit }) {
-    axios.get('/admincheck')
-      .then(response => {
-        commit('adminExist', response.data)
-      })
-      .catch(error => {
-        console.log(error)
       })
   },
   addStaff ({ commit }, payload) {
@@ -318,13 +237,11 @@ export default {
       status: 1
     }
     axios.post('/staffs', load)
-      .then(response => {
+      .then(() => {
         commit('setSuccess', true)
-        // console.log(response)
       })
       .catch(error => {
         commit('setError', error)
-        console.log(error)
       })
   },
   getStaffs ({ commit }) {
@@ -334,9 +251,8 @@ export default {
         commit('setLoading', false)
         commit('setStaffs', response.data.data)
       })
-      .catch(error => {
-        commit('setLoading', false)
-        console.log(error)
+      .catch(() => {
+        commit('setLoading', null)
       })
   },
   signInUser ({ commit }, payload) {
@@ -345,7 +261,6 @@ export default {
     axios.get(`/signin?user=${payload.email}&pass=${payload.password}`)
       .then(response => {
         commit('setLoading', null)
-        // console.log(response.data[0])
         const newUser = {
           id: response.data[0].id,
           role: response.data[0].type
@@ -355,7 +270,6 @@ export default {
       .catch(error => {
         commit('setLoading', null)
         commit('setError', error)
-        console.log(error)
       })
   },
 
@@ -366,9 +280,7 @@ export default {
 
   // PAYMENT
   addPayment ({ commit }, payload) {
-    commit('setLoading', {
-      type: 'addPayment'
-    })
+    commit('setLoading', true)
     commit('clearError')
     commit('setSuccess', false)
     const payment = {
@@ -384,19 +296,12 @@ export default {
     // let userId
     axios.post(`/members/${payload.id}/payments`, payment)
       .then(response => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setSuccess', true)
       })
       .catch(error => {
-        commit('setLoading', null)
+        commit('setLoading', false)
         commit('setError', error)
-        console.log(error)
       })
   }
-  // clearError ({ commit }) {
-  //   commit('clearError')
-  // },
-  // clearSuccess ({ commit }) {
-  //   commit('setSuccess', false)
-  // }
 }

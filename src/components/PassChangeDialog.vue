@@ -14,7 +14,7 @@
         <v-card-title>
           Change Password
         </v-card-title>
-        <v-form ref="form"
+        <v-form ref="form" v-model="valid"
           @submit.prevent = "onSaveChanges"
         >
           <v-card-text>
@@ -36,7 +36,7 @@
               :type="show2 ? 'text' : 'password'"
               name="confirmPassword"
               autocomplete="new-password"
-              :rules="[rules.required,passwordMatch]"
+              :rules="[rules.required, passwordMatch]"
             ></v-text-field>
           </v-card-text>
           <v-card-actions>
@@ -53,7 +53,7 @@
               dark
               depressed
               type="submit"
-              v-if="formIsValid"
+              v-if="valid"
             >
               Save
             </v-btn>
@@ -70,6 +70,7 @@ export default {
   props: ['item'],
   data () {
     return {
+      valid: false,
       editDialog: false,
       show1: true,
       show2: true,
@@ -88,13 +89,6 @@ export default {
         return "Passwords don't match"
       } else {
         return true
-      }
-    },
-    formIsValid () {
-      if (this.password !== '' && this.confirmPassword !== '' && this.password === this.confirmPassword) {
-        return true
-      } else {
-        return false
       }
     }
   },

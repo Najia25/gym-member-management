@@ -4,6 +4,19 @@
       <v-img src="@/assets/background.jpg" lazy-src="@/assets/background-min.jpg" :aspect-ratio="16/9" class="maxHeight">
         <v-row align="center" class="signup-wrapper fill-height">
           <v-col col="12" sm="6" class="mx-auto">
+            <v-card class="mt-5 text-left" color= "rgba(0, 0, 0, 0.4)" dark>
+              <v-card-title>
+                Login credentials
+              </v-card-title>
+              <v-card-text>
+                <div><strong>Admin</strong></div>
+                <div><strong class="mr-1">Email</strong> admin@test.com</div>
+                <div><strong class="mr-1">Password</strong> 123456</div>
+                <div class="mt-3"><strong>Manager</strong></div>
+                <div><strong class="mr-1">Email</strong> manager@test.com</div>
+                <div><strong class="mr-1">Password</strong> 123456</div>
+              </v-card-text>
+            </v-card>
               <v-card class="mt-5" color= "rgba(0, 0, 0, 0.4)" dark>
               <v-alert type="error" dismissible @input="onDismissed" v-if="error">
                 Incorrect credentials
@@ -18,6 +31,7 @@
                       label="Email"
                       name="email"
                       type="email"
+                      autocomplete="username"
                       :rules="[rules.required]"
                     ></v-text-field>
                       <v-text-field

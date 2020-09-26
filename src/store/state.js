@@ -1,18 +1,8 @@
-import store from './index'
-import axios from 'axios'
-
 export default {
-  home: [],
   user: null,
-  adminExist: axios.get('http://api.zahin.me/api/admincheck')
-    .then(response => {
-      store.commit('adminExist', response.data)
-    }),
   error: null,
-  loading: null,
+  loading: false,
   success: false,
-  approvedMembers: [],
-  allMembers: [],
   pendingMembers: [],
   allPayments: [],
   pendingPayments: [],

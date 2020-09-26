@@ -65,9 +65,9 @@
             Close
           </v-btn>
           <v-btn
-            :loading="loadingEditUser"
-            :color="loadingEditUser ? 'grey lighten-1' : 'primary'"
-            :depressed="loadingEditUser"
+            :loading="loading"
+            :color="loading ? 'grey lighten-1' : 'primary'"
+            :depressed="loading"
             dark
             @click="onSaveChanges"
           >
@@ -108,21 +108,22 @@ export default {
       membershipFeeDate: this.singleMember.reg_date,
       rules: {
         required: value => !!value || 'Required.'
-      }
+      },
+      loadingEditUser: false
     }
   },
   computed: {
-    ...mapState(['loading']),
-    loadingEditUser () {
-      if (this.loading && this.loading.type === 'editUserDetails') {
-        return true
-      } else {
-        return false
-      }
-    }
+    ...mapState(['loading'])
+    // loadingEditUser () {
+    //   if (this.loading && this.loading.type === 'editUserDetails') {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
   },
   watch: {
-    loadingEditUser () {
+    loading () {
       if (!this.loadingEditUser) {
         this.editDialog = false
       }
