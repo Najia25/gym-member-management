@@ -23,7 +23,7 @@ npm run lint
 This system will help the gym owners to keep track of the gym members and member's payments. The owner can also track which staff has added how many new members in a specific time period to measure employee performance. The system will have two types of user:  
     1. Admin  
     2. Manager  
-'Admin' type user will be able to perform following tasks:  
+## 'Admin' type user will be able to perform following tasks:  
     1. Add new member  
     2. Take payment  
     3. Approve pending member/payment added by the manager or himself  
@@ -32,7 +32,7 @@ This system will help the gym owners to keep track of the gym members and member
     6. Edit member profile  
     7. Print receipt after adding a new member or payment  
     8. See payment history of a gym member  
-'Manager' type user will be able to add following tasks:  
+## 'Manager' type user will be able to add following tasks:  
     1. Add new member  
     2. Take payment  
     3. Edit member profile  
