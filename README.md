@@ -1,6 +1,6 @@
 # gym-member-management
 ## Project demo
-https://gym.najiaafrin.com/
+http://gym.najiaafrin.com/
 
 ## Project setup
 ```
